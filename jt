@@ -15,7 +15,7 @@ tool="$1"
 tool_args="${@:2}"
 
 fail () {
-    echo "Trying to call tool '$tool': $1"
+    echo "Trying to call tool '$tool': $tool"
     exit 1 }
 
 download () {
@@ -31,8 +31,8 @@ unpack () {
         && fail "Could not unpack '$tool'" \
             "since '$jt_local/toolbox/$tool' already exists."
 
-    tar -xf "$1.tar.gz" -C "$jt_local/toolbox"
-    [ -f "$jt_local/toolbox/$1/Makefile" ] && make -C "$jt_local/toolbox/$tool"
+    tar -xf "$tool.tar.gz" -C "$jt_local/toolbox"
+    [ -f "$jt_local/toolbox/$tool/Makefile" ] && make -C "$jt_local/toolbox/$tool"
 
     [ ! -f "$jt_local/toolbox/$tool/$tool" ] \
         && fail "Could not unpack '$tool'."
@@ -44,6 +44,6 @@ run () {
     "$jt_local/toolbox/$tool/$tool" "$tool_args" }
 
 
-[ ! -f "$jt_local/toolbox/$1.tar.gz" ] && download
-[ ! -d "$jt_local/toolbox/$1" ] && unpack
+[ ! -f "$jt_local/toolbox/$tool.tar.gz" ] && download
+[ ! -d "$jt_local/toolbox/$tool" ] && unpack
 run
