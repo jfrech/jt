@@ -11,11 +11,11 @@ require () {
 require curl
 require sed
 
+mkdir -p "$jt_local"
+
 curl_fail () {
     echo "Could not curl '$jt_repository/jt'." \
         && rm "$jt_local/jt" && rmdir "$jt_local" && exit 1 }
-
-mkdir -p "$jt_local"
 curl --silent --fail "$jt_repository/jt" \
     | sed "s|^jt_repository=\"[^\"]*\"\$|jt_repository=\"$jt_repository\"|" \
     > "$jt_local/jt" \

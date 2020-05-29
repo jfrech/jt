@@ -32,7 +32,8 @@ unpack () {
             "since '$jt_local/toolbox/$tool' already exists."
 
     tar -xf "$jt_local/toolbox/$tool.tar.gz" -C "$jt_local/toolbox"
-    [ -f "$jt_local/toolbox/$tool/Makefile" ] && make -C "$jt_local/toolbox/$tool"
+    [ -f "$jt_local/toolbox/$tool/Makefile" ] \
+        && make -C "$jt_local/toolbox/$tool" > /dev/null
 
     [ ! -f "$jt_local/toolbox/$tool/$tool" ] \
         && fail "Could not unpack '$tool'."
