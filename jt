@@ -44,7 +44,7 @@ run () {
         && fail "Could not find tool '$tool'."
     "$jt_local/toolbox/$tool/$tool" "$tool_args" }
 
-
+[ -z "$tool" ] && echo "Usage: jt <tool>" && exit 1
 [ ! -f "$jt_local/toolbox/$tool.tar.gz" ] && download
 [ ! -d "$jt_local/toolbox/$tool" ] && unpack
 run
