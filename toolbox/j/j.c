@@ -1,3 +1,5 @@
+/* Jonathan Frech, 29th and 30th of May 2020 */
+
 #include <stdio.h>
 
 int main() {

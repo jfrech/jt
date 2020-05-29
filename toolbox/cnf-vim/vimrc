@@ -1,0 +1,40 @@
+" Jonathan Frech's .vimrc
+
+
+
+set number
+set numberwidth=1
+set colorcolumn=80
+colo j
+
+" use four spaces instead of a tab
+set expandtab softtabstop=4 shiftwidth=4
+
+set linebreak
+set breakindent
+set list listchars=tab:>>,trail:~
+
+" By default, splits open above and to the left.
+set splitbelow splitright
+
+nnoremap <Left>  <Nop>
+nnoremap <Right> <Nop>
+nnoremap <Up>    <Nop>
+nnoremap <Down>  <Nop>
+inoremap <Left>  <Nop>
+inoremap <Right> <Nop>
+inoremap <Up>    <Nop>
+inoremap <Down>  <Nop>
+vnoremap <Left>  <Nop>
+vnoremap <Right> <Nop>
+vnoremap <Up>    <Nop>
+vnoremap <Down>  <Nop>
+"cnoremap <Left>  <Nop>
+"cnoremap <Right> <Nop>
+"cnoremap <Up>    <Nop>
+"cnoremap <Down>  <Nop>
+
+
+" QUESTIONABLE
+set shortmess+=aAcIws       " Hide or shorten certain messages
+set wildmenu                " Tab completion menu when using command mode
