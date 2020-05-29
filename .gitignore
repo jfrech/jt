@@ -1,11 +1,2 @@
-*
-!*.*
-!*/
-
-!/jt
-!/LICENSE
-
-!Makefile
-
 *.swo
 *.swp

@@ -1,0 +1,15 @@
+#! /bin/zsh
+
+jt_local="$(realpath "$(dirname "$0")/../..")"
+jt_repository="$(grep '^jt_repository="[^"]*"$' "$jt_local/jt" \
+    | sed 's|^jt_repository="||; s|"$||')"
+
+rm -rf "$jt_local/toolbox"
+
+curl_fail () {
+    echo "Could not curl '$jt_repository/jt'." \
+        && rm "$jt_local/jt" && rmdir "$jt_local" && exit 1 }
+curl --silent --fail "$jt_repository/jt" \
+    | sed "s|^jt_repository=\"[^\"]*\"\$|jt_repository=\"$jt_repository\"|" \
+    > "$jt_local/jt" \
+    || curl_fail
