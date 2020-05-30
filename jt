@@ -1,5 +1,7 @@
 #! /bin/zsh
 
+# Jonathan Frech, April to May 2020
+
 jt_repository=""
 jt_local="$(dirname "$0")"
 
