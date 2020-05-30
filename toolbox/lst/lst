@@ -1,6 +1,7 @@
 #! /bin/zsh
 
+jt_local="$(realpath "$(dirname "$0")/../..")"
 jt_repository="$(grep '^jt_repository="[^"]*"$' "$jt_local/jt" \
     | sed 's|^jt_repository="||; s|"$||')"
 
-curl --silent --fail "$jt_repository/toolbelt/tools.txt"
+curl --silent --fail "$jt_repository/toolbox/tools.txt"
