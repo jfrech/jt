@@ -12,7 +12,6 @@ require gcc
 
 
 tool="$1"
-tool_args="${@:2}"
 
 fail () {
     echo "Trying to call tool '$tool': $1"
@@ -42,9 +41,10 @@ unpack () {
 run () {
     [ ! -f "$jt_local/toolbox/$tool/$tool" ] \
         && fail "Could not find tool '$tool'."
-    "$jt_local/toolbox/$tool/$tool" "$tool_args" }
+    "$jt_local/toolbox/$tool/$tool" "$@" }
 
 [ -z "$tool" ] && echo "Usage: jt <tool>" && exit 1
 [ ! -f "$jt_local/toolbox/$tool.tar.gz" ] && download
 [ ! -d "$jt_local/toolbox/$tool" ] && unpack
-run
+
+run "${@:2}"
