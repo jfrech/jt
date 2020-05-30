@@ -14,3 +14,4 @@ curl --silent --fail "$jt_repository/jt" \
     > "$jt_local/.jt.new" \
     || curl_fail
 mv "$jt_local/.jt.new" "$jt_local/jt"
+chmod +x "$jt_local/jt"
