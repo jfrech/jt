@@ -11,5 +11,6 @@ curl_fail () {
         && rm "$jt_local/jt" && rmdir "$jt_local" && exit 1 }
 curl --silent --fail "$jt_repository/jt" \
     | sed "s|^jt_repository=\"[^\"]*\"\$|jt_repository=\"$jt_repository\"|" \
-    > "$jt_local/jt" \
+    > "$jt_local/.jt.new" \
     || curl_fail
+mv "$jt_local/.jt.new" "$jt_local/jt"
