@@ -15,3 +15,7 @@ curl --silent --fail "$jt_repository/jt" \
     || curl_fail
 mv "$jt_local/.jt.new" "$jt_local/jt"
 chmod +x "$jt_local/jt"
+
+
+# TODO Nuke must not remove *every* tool.
+"$jt_local/jt" jprompt > /dev/null
