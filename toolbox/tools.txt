@@ -4,5 +4,6 @@ cnf-fnt
 cnf-vim
 fclr
 j
+jprompt
 lst
 nuke
