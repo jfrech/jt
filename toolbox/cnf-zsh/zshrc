@@ -1,0 +1,7 @@
+bindkey -v
+export KEYTIMEOUT=1
+
+setopt PROMPT_SUBST
+export PROMPT='$($jt_local/jt jprompt) %M@%n %5~ %# %E'
+
+export PATH="$PATH:$jt_local"

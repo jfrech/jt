@@ -2,6 +2,7 @@ ansiclr
 ascii
 cnf-fnt
 cnf-vim
+cnf-zsh
 fclr
 j
 jprompt
