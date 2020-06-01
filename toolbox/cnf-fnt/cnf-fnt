@@ -1,0 +1,23 @@
+#! /bin/zsh
+
+# Jonathan Frech, 2nd of June 2020
+
+fonts_directory="$HOME/.local/share/fonts"
+
+download_font () {
+    url="$1" base_name="$2" extension="$3"
+    [ ! "$extension" = 'zip' ] && \
+        echo "Unknown extension '$extension'." && exit 1
+
+    [ -e "$fonts_directory/$base_name" ] && echo "A font of the name" \
+        "'$base_name' appears to already be installed." && exit 1
+    mkdir -p "$fonts_directory/$base_name"
+
+    curl --silent --fail "$url/$base_name.$extension" \
+        > "$fonts_directory/$base_name/$base_name.$extension"
+    unzip -d "$fonts_directory/$base_name" \
+        "$fonts_directory/$base_name/$base_name.$extension" > /dev/null }
+
+download_font 'https://rubjo.github.io/victor-mono' 'VictorMonoAll' 'zip'
+
+fc-cache -f
