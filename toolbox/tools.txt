@@ -1,5 +1,6 @@
 ansiclr
 ascii
+cnf-fnt
 cnf-vim
 fclr
 j
