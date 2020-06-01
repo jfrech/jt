@@ -1,7 +1,6 @@
 " j color scheme
 
 " http://vimdoc.sourceforge.net/htmldoc/syntax.html
-" http://vimdoc.sourceforge.net/htmldoc/syntax.html#hl-NonText
 
 set background=dark
 let g:colors_name = "j"

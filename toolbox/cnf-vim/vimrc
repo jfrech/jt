@@ -1,6 +1,6 @@
 " Jonathan Frech's .vimrc
 
-set number 
+set number
 set numberwidth=4
 set colorcolumn=80
 
