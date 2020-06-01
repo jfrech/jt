@@ -1,5 +1,6 @@
 ansiclr
 ascii
+cnf-all
 cnf-fnt
 cnf-vim
 cnf-zsh

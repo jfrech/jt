@@ -16,7 +16,8 @@ require printf echo
 require grep sed
 require mv rm mkdir rmdir
 require curl tar
-require make gcc
+require make gcc git
+require xargs
 require chmod
 
 

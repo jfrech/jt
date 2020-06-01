@@ -1,0 +1,5 @@
+#! /bin/zsh
+
+jt="$(realpath "$cnf_zsh/../../jt")"
+
+"$jt" lst | grep '^cnf-' | grep -v '^cnf-all$' | xargs -l "$jt"
