@@ -4,7 +4,6 @@ set number
 set numberwidth=4
 set colorcolumn=80
 
-set syntax
 colo j
 
 " use four spaces instead of a tab
