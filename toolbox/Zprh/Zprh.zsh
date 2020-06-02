@@ -10,5 +10,6 @@ uuid="$(uuidgen)"
 mkdir -p "$jt_local_tool/.exec/"
 cp -r "$jt_local_tool/Zprh-repository/stdlib" "$jt_local_tool/.exec/$uuid"
 cp "$Zprh_source" "$jt_local_tool/.exec/$uuid/src.zprh"
-"$jt_local_tool/Zprh-repository/Zprh" "$jt_local_tool/.exec/$uuid/src.zprh"
+"$jt_local_tool/Zprh-repository/Zprh" \
+    "$jt_local_tool/.exec/$uuid/src.zprh" "${@:2}"
 rm -rf "$jt_local_tool/.exec/$uuid"
