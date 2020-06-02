@@ -11,7 +11,7 @@ require () {
         [ -z "$(command -v $cmd)" ] && echo "Please install '$cmd'." && exit 1
     done }
 
-require realpath dirname
+require realpath dirname ln
 require printf echo
 require grep sed
 require mv rm mkdir rmdir
@@ -19,6 +19,8 @@ require curl tar
 require make gcc git
 require xargs
 require chmod
+
+require clang
 
 
 tool="$1"
