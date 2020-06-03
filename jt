@@ -39,10 +39,10 @@ list_line () {
     tool="$1"
     printf '['
     # downloaded, extracted, has Makefile, built
-    [ -f "$jt_local/toolbox/$tool.tar.gz"   ] && printf 'd' || printf ' '
-    [ -d "$jt_local/toolbox/$tool"          ] && printf 'x' || printf ' '
-    [ -f "$jt_local/toolbox/$tool/Makefile" ] && printf 'M' || printf ' '
-    [ -f "$jt_local/toolbox/$tool/$tool"    ] && printf 'b' || printf ' '
+    [ -f "$jt_local/toolbox/$tool.tar.gz"   ] && printf 'd' || printf '-'
+    [ -d "$jt_local/toolbox/$tool"          ] && printf 'x' || printf '-'
+    [ -f "$jt_local/toolbox/$tool/Makefile" ] && printf 'M' || printf '-'
+    [ -f "$jt_local/toolbox/$tool/$tool"    ] && printf 'b' || printf '-'
     printf '] %s\n' "$tool" }
 list () {
     for_all_tools list_line }
