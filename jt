@@ -109,14 +109,11 @@ internal () {
         build)    build ${@:2} ;;
         run)      run ${@:2} ;;
         get)      get ${@:2} ;;
-
         help)     help ${@:2} ;;
-
         require)  require ${@:2} ;;
-
         *) fail "internal (): Unknown command '$1'." ;;
     esac }
 
 
-[ "$1" = 'internal' ] && internal ${@:2} && exit 0
-run $@
+[ "$1" = 'internal' ] && internal ${@:2}
+[ ! "$1" = 'internal' ] && run $@
