@@ -95,6 +95,33 @@ run () {
         && fail "run (): Could not find tool '$tool'."
     "$jt_local/toolbox/$tool/$tool" ${@:2} }
 
+remove () {
+    [ ! "$#" = '1' ] && fail 'remove (): Invalid arg count.'
+    tool="$1"
+    [ "$tool" = 'all' ] && for_all_tools remove && return 0
+
+    rm -rf "$jt_local/toolbox/$tool.tar.gz" "$jt_local/toolbox/$tool" }
+
+update_self () {
+    mkdir -p "$jt_local/.download"
+    curl --fail --silent "$jt_repository/jt" \
+        > "$jt_local/.download/jt" \
+        || fail "update_self (): Failed to download 'jt'."
+
+    mkdir -p "$jt_local"
+    mv "$jt_local/.download/jt" "$jt_local/jt" }
+update () {
+    [ ! "$#" = '1' ] && fail 'update (): Invalid arg count.'
+    tool="$1"
+    [ "$tool" = 'all' ] && for_all_tools update && return 0
+    [ "$tool" = 'self' ] && update_self && return 0
+
+    rebuild=''
+    [ -e "$jt_local/toolbox/$tool.tar.gz" ] && remove "$tool" && rebuild='j'
+    [ -e "$jt_local/toolbox/$tool"        ] && remove "$tool" && rebuild='j'
+
+    [ -n "$rebuild" ] && build "$tool" }
+
 get () {
     fail 'get (): Not yet implemented.' }
 
@@ -104,10 +131,14 @@ help () {
 internal () {
     case "$1" in
         list)     list ${@:2} ;;
+
         download) download ${@:2} ;;
         extract)  extract ${@:2} ;;
         build)    build ${@:2} ;;
         run)      run ${@:2} ;;
+        remove)   remove ${@:2} ;;
+        update)   update ${@:2} ;;
+
         get)      get ${@:2} ;;
         help)     help ${@:2} ;;
         require)  require ${@:2} ;;
