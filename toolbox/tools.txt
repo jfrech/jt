@@ -8,6 +8,4 @@ fclr
 j
 jprompt
 krrp
-lst
-nuke
 Zprh

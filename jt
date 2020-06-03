@@ -1,14 +1,19 @@
 #! /bin/zsh
 
-# Jonathan Frech, April to May 2020
+# Jonathan Frech, April to June 2020
 
 jt_repository=""
 jt_local="$(dirname "$0")"
 
 
+fail () {
+    echo "Error: $@"
+    exit 1 }
+
 require () {
     for cmd in "$@"; do
-        [ -z "$(command -v $cmd)" ] && echo "Please install '$cmd'." && exit 1
+        [ -z "$(command -v $cmd)" ] \
+            && fail "require (): Please install '$cmd'."
     done }
 
 require realpath dirname ln
@@ -22,24 +27,50 @@ require chmod
 
 require clang
 
+for_all_tools () {
+    [ ! "$#" = '1' ] && fail 'for_all_tools (): Invalid arg count.'
+    curl --silent --fail "$jt_repository/toolbox/tools.txt" | \
+        while read ln; do
+            "$1" "$ln";
+        done }
 
-tool="$1"
 
-fail () {
-    echo "Trying to call tool '$tool': $1"
-    exit 1 }
+list_line () {
+    tool="$1"
+    printf '['
+    # downloaded, extracted, has Makefile, built
+    [ -f "$jt_local/toolbox/$tool.tar.gz"   ] && printf 'd' || printf ' '
+    [ -d "$jt_local/toolbox/$tool"          ] && printf 'x' || printf ' '
+    [ -f "$jt_local/toolbox/$tool/Makefile" ] && printf 'M' || printf ' '
+    [ -f "$jt_local/toolbox/$tool/$tool"    ] && printf 'b' || printf ' '
+    printf '] %s\n' "$tool" }
+list () {
+    for_all_tools list_line }
 
 download () {
-    mkdir -p "$jt_local/toolbox/"
-    curl --fail --silent "$jt_repository/toolbox/$tool.tar.gz" \
-        > "$jt_local/toolbox/$tool.tar.gz" \
-        || fail "Could not curl '$jt_repository/toolbox/$tool.tar.gz'." }
+    [ ! "$#" = '1' ] && fail 'download (): Invalid arg count.'
+    tool="$1"
+    [ "$tool" = 'all' ] && for_all_tools download && return 0
 
-unpack () {
+    mkdir "$jt_local/.download"
+    curl --fail --silent "$jt_repository/toolbox/$tool.tar.gz" \
+        > "$jt_local/.download/$tool.tar.gz"
+        || fail "download (): Failed to download '$tool'."
+
+    mkdir -p "$jt_local/toolbox"
+    mv "$jt_local/.download/$tool.tar.gz" "$jt_local/toolbox/$tool.tar.gz" }
+
+build () {
+    [ ! "$#" = '1' ] && fail 'build (): Invalid arg count.'
+    tool="$1"
+    [ "$tool" = 'all' ] && for_all_tools build && return 0
+
+    [ ! -f "$jt_local/toolbox/$tool.tar.gz" ] && download "$tool"
+
     [ ! -f "$jt_local/toolbox/$tool.tar.gz" ] \
-        && fail "Could not find '$jt_local/toolbox/$tool.tar.gz'."
+        && fail "build (): Could not find '$jt_local/toolbox/$tool.tar.gz'."
     [ -e "$jt_local/toolbox/$tool" ] \
-        && fail "Could not unpack '$tool'" \
+        && fail "build (): Could not unpack '$tool'" \
             "since '$jt_local/toolbox/$tool' already exists."
 
     tar -xf "$jt_local/toolbox/$tool.tar.gz" -C "$jt_local/toolbox"
@@ -51,12 +82,28 @@ unpack () {
     chmod +x "$jt_local/toolbox/$tool/$tool" }
 
 run () {
+    [ -z "$1" ] && fail 'run (): Invalid arg count.'
+    tool="$1"
+    [ "$tool" = 'all' ] && fail 'run (): Refusing to run all tools.'
+
     [ ! -f "$jt_local/toolbox/$tool/$tool" ] \
         && fail "Could not find tool '$tool'."
-    "$jt_local/toolbox/$tool/$tool" "$@" }
+    "$jt_local/toolbox/$tool/$tool" ${@:2} }
 
-[ -z "$tool" ] && echo "Usage: jt <tool>" && exit 1
-[ ! -f "$jt_local/toolbox/$tool.tar.gz" ] && download
-[ ! -d "$jt_local/toolbox/$tool" ] && unpack
+get () {
+    fail 'get (): Not yet implemented.' }
 
-run "${@:2}"
+internal () {
+    case "$1" in
+        list)     list ${@:2} ;;
+        download) download ${@:2} ;;
+        build)    build ${@:2} ;;
+        run)      run ${@:2} ;;
+        get)      get ${@:2} ;;
+
+        *) fail "internal (): Unknown command '$1'." ;;
+    esac }
+
+
+[ "$1" = 'internal' ] && internal ${@:2} && exit 0
+run $@
