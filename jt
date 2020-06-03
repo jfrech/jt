@@ -117,3 +117,5 @@ internal () {
 
 [ "$1" = 'internal' ] && internal ${@:2}
 [ ! "$1" = 'internal' ] && run $@
+
+exit 0
