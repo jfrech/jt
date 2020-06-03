@@ -7,7 +7,8 @@ jt_local="$(dirname "$0")"
 
 
 fail () {
-    echo "Error: $@" >&2
+    printf "\33[1m\33[94mjt error:\33[0m " >&2
+    echo "$@" >&2
     exit 1 }
 
 require () {
@@ -80,7 +81,7 @@ build () {
         && make --silent -C "$jt_local/toolbox/$tool" > /dev/null
 
     [ ! -f "$jt_local/toolbox/$tool/$tool" ] \
-        && fail "Could not unpack '$tool'."
+        && fail "build (): Could not unpack '$tool'."
     chmod +x "$jt_local/toolbox/$tool/$tool" }
 
 run () {
