@@ -15,8 +15,6 @@ require () {
         [ -z "$(command -v $cmd)" ] \
             && fail "require (): Please install '$cmd'."
     done }
-
-
 require realpath dirname
 require mv rm mkdir rmdir
 require printf echo
@@ -24,8 +22,6 @@ require grep sed
 require curl tar
 require make gcc chmod
 require xargs
-
-require clang ln
 
 for_all_tools () {
     [ ! "$#" = '1' ] && fail 'for_all_tools (): Invalid arg count.'
