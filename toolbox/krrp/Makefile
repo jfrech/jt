@@ -1,5 +1,5 @@
 krrp:
-	"$$(realpath "$$(dirname "$$0")/../../jt")" internal require \
+	"$$(realpath "$(CURDIR)/../../jt")" internal require \
 	    git clang ln
 	
 	git clone https://www.github.com/jfrech/krrp.git krrp-repository \
