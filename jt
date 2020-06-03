@@ -105,6 +105,7 @@ remove () {
 update_self () {
     mkdir -p "$jt_local/.download"
     curl --fail --silent "$jt_repository/jt" \
+        | sed "s|^jt_repository=\"[^\"]*\"\$|jt_repository=\"$jt_repository\"|" \
         > "$jt_local/.download/jt" \
         || fail "update_self (): Failed to download 'jt'."
 
