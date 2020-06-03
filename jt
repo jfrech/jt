@@ -52,7 +52,7 @@ download () {
     tool="$1"
     [ "$tool" = 'all' ] && for_all_tools download && return 0
 
-    mkdir "$jt_local/.download"
+    mkdir -p "$jt_local/.download"
     curl --fail --silent "$jt_repository/toolbox/$tool.tar.gz" \
         > "$jt_local/.download/$tool.tar.gz" \
         || fail "download (): Failed to download '$tool'."
