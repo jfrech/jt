@@ -54,7 +54,7 @@ download () {
 
     mkdir "$jt_local/.download"
     curl --fail --silent "$jt_repository/toolbox/$tool.tar.gz" \
-        > "$jt_local/.download/$tool.tar.gz"
+        > "$jt_local/.download/$tool.tar.gz" \
         || fail "download (): Failed to download '$tool'."
 
     mkdir -p "$jt_local/toolbox"
@@ -86,8 +86,10 @@ run () {
     tool="$1"
     [ "$tool" = 'all' ] && fail 'run (): Refusing to run all tools.'
 
+    [ ! -f "$jt_local/toolbox/$tool/$tool" ] && build "$tool"
+
     [ ! -f "$jt_local/toolbox/$tool/$tool" ] \
-        && fail "Could not find tool '$tool'."
+        && fail "run (): Could not find tool '$tool'."
     "$jt_local/toolbox/$tool/$tool" ${@:2} }
 
 get () {
