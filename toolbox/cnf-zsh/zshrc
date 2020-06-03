@@ -1,9 +1,7 @@
 bindkey -v
 export KEYTIMEOUT=1
 
-# TODO The tool only needs to be installed, not called.
-[ ! -f "$jt_local/toolbox/jprompt/jprompt" ] \
-    && "$jt_local/jt" jprompt > /dev/null
+"$jt_local/jt" internal build jprompt
 setopt PROMPT_SUBST
 export PROMPT='$($jt_local/toolbox/jprompt/jprompt) %M@%n %5~ %# %E'
 
