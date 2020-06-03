@@ -7,7 +7,7 @@ jt_local="$(dirname "$0")"
 
 
 fail () {
-    echo "Error: $@"
+    echo "Error: $@" >&2
     exit 1 }
 
 require () {
