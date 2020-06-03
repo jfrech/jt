@@ -58,6 +58,7 @@ download () {
         || fail "download (): Failed to download '$tool'."
 
     mkdir -p "$jt_local/toolbox"
+    rm -rf "$jt_local/toolbox/$tool.tar.gz"
     mv "$jt_local/.download/$tool.tar.gz" "$jt_local/toolbox/$tool.tar.gz" }
 
 extract () {
@@ -66,13 +67,8 @@ extract () {
     [ "$tool" = 'all' ] && for_all_tools extract && return 0
 
     [ ! -f "$jt_local/toolbox/$tool.tar.gz" ] && download "$tool"
-    [ ! -f "$jt_local/toolbox/$tool.tar.gz" ] \
-        && fail "extract (): Could not find '$jt_local/toolbox/$tool.tar.gz'."
 
-    [ -e "$jt_local/toolbox/$tool" ] \
-        && fail "extract (): Could not unpack '$tool'" \
-            "since '$jt_local/toolbox/$tool' already exists."
-
+    rm -rf "$jt_local/toolbox/$tool"
     tar -xf "$jt_local/toolbox/$tool.tar.gz" -C "$jt_local/toolbox" }
 
 build () {
@@ -80,10 +76,11 @@ build () {
     tool="$1"
     [ "$tool" = 'all' ] && for_all_tools build && return 0
 
-    [ ! -e "$jt_local/toolbox/$tool" ] && extract "$tool"
+    [ ! -d "$jt_local/toolbox/$tool" ] && extract "$tool"
 
     [ -f "$jt_local/toolbox/$tool/Makefile" ] \
-        && make -C "$jt_local/toolbox/$tool" > /dev/null
+        && rm -rf "$jt_local/toolbox/$tool/$tool" \
+        && make --silent -C "$jt_local/toolbox/$tool" > /dev/null
 
     [ ! -f "$jt_local/toolbox/$tool/$tool" ] \
         && fail "Could not unpack '$tool'."
