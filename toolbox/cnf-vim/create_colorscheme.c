@@ -1,4 +1,4 @@
-/* Jonathan Frech, 30th of April 2020 */
+/* Jonathan Frech, 30th of April, 3rd of June 2020 */
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -12,19 +12,16 @@ const char *color_identifiers[8] = {
 #define N_SCHEMES 3
 const color_t schemes[N_SCHEMES][8] = {
     /* red-yellow */
-    (color_t[8]) {
-        255, 236, 240, 245,
-        160, 202, 208, 178 },
+    { 255, 236, 240, 245,
+      160, 202, 208, 178, },
 
     /* blue-turquise-green */
-    (color_t[8]) {
-        255, 236, 240, 245,
-         26,  30,  76, 118 },
+    { 255, 236, 240, 245,
+       26,  30,  76, 118, },
 
     /* sunny */
-    (color_t[8]) {
-        255, 240, 166, 172,
-        228, 226, 225, 219 },
+    { 255, 240, 166, 172,
+      228, 226, 225, 219, },
 };
 
 int main(int argc, char **argv) {

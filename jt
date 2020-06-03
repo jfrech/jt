@@ -60,20 +60,28 @@ download () {
     mkdir -p "$jt_local/toolbox"
     mv "$jt_local/.download/$tool.tar.gz" "$jt_local/toolbox/$tool.tar.gz" }
 
+extract () {
+    [ ! "$#" = '1' ] && fail 'extract (): Invalid arg count.'
+    tool="$1"
+    [ "$tool" = 'all' ] && for_all_tools extract && return 0
+
+    [ ! -f "$jt_local/toolbox/$tool.tar.gz" ] && download "$tool"
+    [ ! -f "$jt_local/toolbox/$tool.tar.gz" ] \
+        && fail "extract (): Could not find '$jt_local/toolbox/$tool.tar.gz'."
+
+    [ -e "$jt_local/toolbox/$tool" ] \
+        && fail "extract (): Could not unpack '$tool'" \
+            "since '$jt_local/toolbox/$tool' already exists."
+
+    tar -xf "$jt_local/toolbox/$tool.tar.gz" -C "$jt_local/toolbox" }
+
 build () {
     [ ! "$#" = '1' ] && fail 'build (): Invalid arg count.'
     tool="$1"
     [ "$tool" = 'all' ] && for_all_tools build && return 0
 
-    [ ! -f "$jt_local/toolbox/$tool.tar.gz" ] && download "$tool"
+    [ ! -e "$jt_local/toolbox/$tool" ] && extract "$tool"
 
-    [ ! -f "$jt_local/toolbox/$tool.tar.gz" ] \
-        && fail "build (): Could not find '$jt_local/toolbox/$tool.tar.gz'."
-    [ -e "$jt_local/toolbox/$tool" ] \
-        && fail "build (): Could not unpack '$tool'" \
-            "since '$jt_local/toolbox/$tool' already exists."
-
-    tar -xf "$jt_local/toolbox/$tool.tar.gz" -C "$jt_local/toolbox"
     [ -f "$jt_local/toolbox/$tool/Makefile" ] \
         && make -C "$jt_local/toolbox/$tool" > /dev/null
 
@@ -95,13 +103,19 @@ run () {
 get () {
     fail 'get (): Not yet implemented.' }
 
+help () {
+    fail 'help (): Not yet implemented.' }
+
 internal () {
     case "$1" in
         list)     list ${@:2} ;;
         download) download ${@:2} ;;
+        extract)  extract ${@:2} ;;
         build)    build ${@:2} ;;
         run)      run ${@:2} ;;
         get)      get ${@:2} ;;
+
+        help)      help ${@:2} ;;
 
         *) fail "internal (): Unknown command '$1'." ;;
     esac }
