@@ -109,7 +109,8 @@ update_self () {
         || fail "update_self (): Failed to download 'jt'."
 
     mkdir -p "$jt_local"
-    mv "$jt_local/.download/jt" "$jt_local/jt" }
+    mv "$jt_local/.download/jt" "$jt_local/jt"
+    chmod +x "$jt_local/jt" }
 update () {
     [ ! "$#" = '1' ] && fail 'update (): Invalid arg count.'
     tool="$1"
