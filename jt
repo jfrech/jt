@@ -16,16 +16,16 @@ require () {
             && fail "require (): Please install '$cmd'."
     done }
 
-require realpath dirname ln
+
+require realpath dirname
+require mv rm mkdir rmdir
 require printf echo
 require grep sed
-require mv rm mkdir rmdir
 require curl tar
-require make gcc git
+require make gcc chmod
 require xargs
-require chmod
 
-require clang
+require clang ln
 
 for_all_tools () {
     [ ! "$#" = '1' ] && fail 'for_all_tools (): Invalid arg count.'
@@ -113,7 +113,9 @@ internal () {
         run)      run ${@:2} ;;
         get)      get ${@:2} ;;
 
-        help)      help ${@:2} ;;
+        help)     help ${@:2} ;;
+
+        require)  require ${@:2} ;;
 
         *) fail "internal (): Unknown command '$1'." ;;
     esac }

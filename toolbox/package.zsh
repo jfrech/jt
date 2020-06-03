@@ -8,7 +8,8 @@ find . | grep '^\./\([^./]*\)/Makefile$' \
 find . -maxdepth 1 | grep '^\./' | sed 's|^\./||' | grep '\.tar\.gz$' \
     | xargs -l rm -f
 find . -maxdepth 1 | grep '^\./' | sed 's|^\./||' | grep -v '\.' \
-    | sed 's|^\(.*\)$|\1.tar.gz \1|' | xargs -l tar -czf
+    | sed 's|^\(.*\)$|\1.tar \1|' | xargs -l tar -cf
+find . -maxdepth 1 | grep '^\./[a-zA-Z-]\+\.tar$' | xargs -l gzip --best
 
 find . -mindepth 2 | grep -o '^\./[^./]*/' | sed 's|^\./||; s|/$||' \
     | uniq | sort > tools.txt

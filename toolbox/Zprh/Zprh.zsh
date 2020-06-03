@@ -1,5 +1,8 @@
 #! /bin/zsh
 
+jt="$(realpath "$(dirname "$0")/../../jt")"
+"$jt" internal require uuidgen
+
 jt_local_tool="$(realpath "$(dirname "$0")")"
 
 Zprh_source="$(realpath "$1")"
