@@ -146,7 +146,7 @@ internal () {
     rm -rf "$jt_local/toolbox/tools.txt"
 
     case "$1" in
-        list)     download_tools_list && list ${@:2} ;;
+        list)     list ${@:2} ;;
 
         download) download ${@:2} ;;
         extract)  extract ${@:2} ;;
