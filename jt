@@ -24,20 +24,30 @@ require curl tar
 require make gcc chmod
 require xargs
 
+assure_tools_list () {
+    [ -f "$jt_local/toolbox/tools.txt" ] && return 0
+    curl --silent --fail "$jt_repository/toolbox/tools.txt" \
+        > "$jt_local/.download/tools.txt"
+    rm -rf "$jt_local/toolbox/tools.txt"
+    mv "$jt_local/.download/tools.txt" "$jt_local/toolbox/tools.txt" }
+
 for_all_tools () {
     [ ! "$#" = '1' ] && fail 'for_all_tools (): Invalid arg count.'
-    curl --silent --fail "$jt_repository/toolbox/tools.txt" | \
-        while read ln; do
-            "$1" "$ln";
-        done }
+
+    assure_tools_list
+    < "$jt_local/toolbox/tools.txt" | while read ln; do "$1" "$ln"; done }
 
 list () {
-    [ ! "$#" = '1' ] && fail 'list (): Invalid arg count.'
+    [ ! "$#" = '1' ] && for_all_tools list && return 0
     tool="$1"
     [ "$tool" = 'all' ] && for_all_tools list && return 0
 
+    assure_tools_list
+    ! grep -q "!$tool\$" "$jt_local/toolbox/tools.txt" \
+        && fail "list (): Tool '$tool' does not exist."
+
+    # [dxMb]: downloaded, extracted, has Makefile, built
     printf '['
-    # downloaded, extracted, has Makefile, built
     [ -f "$jt_local/toolbox/$tool.tar.gz"   ] && printf 'd' || printf -- '-'
     [ -d "$jt_local/toolbox/$tool"          ] && printf 'x' || printf -- '-'
     [ -f "$jt_local/toolbox/$tool/Makefile" ] && printf 'M' || printf -- '-'
@@ -122,7 +132,9 @@ update () {
     [ -e "$jt_local/toolbox/$tool.tar.gz" ] && remove "$tool" && rebuild='j'
     [ -e "$jt_local/toolbox/$tool"        ] && remove "$tool" && rebuild='j'
 
-    [ -n "$rebuild" ] && build "$tool" }
+    [ -n "$rebuild" ] && build "$tool" && return 0
+
+    fail "update (): Cannot update uninstalled tool '$tool'." }
 
 get () {
     fail 'get (): Not yet implemented.' }
@@ -131,8 +143,10 @@ help () {
     fail 'help (): Not yet implemented.' }
 
 internal () {
+    rm -rf "$jt_local/toolbox/tools.txt"
+
     case "$1" in
-        list)     list ${@:2} ;;
+        list)     download_tools_list && list ${@:2} ;;
 
         download) download ${@:2} ;;
         extract)  extract ${@:2} ;;
@@ -146,7 +160,6 @@ internal () {
         require)  require ${@:2} ;;
         *) fail "internal (): Unknown command '$1'." ;;
     esac }
-
 
 [ "$1" = 'internal' ] && internal ${@:2}
 [ ! "$1" = 'internal' ] && run $@
