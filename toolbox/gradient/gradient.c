@@ -3,12 +3,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 #include <time.h>
 
 #include <termios.h>
 #include <unistd.h>
 #include <sys/ioctl.h>
+
+const bool FULL_COLOR = false;
 
 void terminal_dimensions(size_t *h, size_t *w) {
     struct winsize win;
@@ -39,6 +42,17 @@ typedef struct { size_t h, w; color_t *data; } pixmap_t;
 void trisect_color(color_t c, uint8_t *r, uint8_t *g, uint8_t *b) {
     *r = (c >> 16) & 0xff; *g = (c >> 8) & 0xff; *b = c & 0xff; }
 
+void display_pixel(color_t c) {
+    uint8_t r, g, b;
+    trisect_color(c, &r, &g, &b);
+
+    if (FULL_COLOR)
+        printf("\33[48;2;%d;%d;%dm  \33[0m", (int) r, (int) g, (int) b);
+    else {
+        r = r * 6 / 256; g = g * 6 / 256; b = b * 6 / 256;
+        uint8_t a = 16 + r*6*6 + g*6 + b;
+        printf("\33[48;5;%dm  \33[0m", (int) a); } }
+
 void render_pixmap(pixmap_t pixmap) {
     size_t term_h, term_w;
     terminal_dimensions(&term_h, &term_w);
@@ -48,9 +62,7 @@ void render_pixmap(pixmap_t pixmap) {
     clear_screen();
     for (size_t y = 0; y < h; y++) {
         for (size_t x = 0; x < w; x++) {
-            uint8_t r, g, b;
-            trisect_color(pixmap.data[y *pixmap.w+ x], &r, &g, &b);
-            printf("\33[48;2;%d;%d;%dm  \33[0m", (int) r, (int) g, (int) b); }
+            display_pixel(pixmap.data[y *pixmap.w+ x]); }
         printf("\n"); } }
 
 pixmap_t gradient() {
