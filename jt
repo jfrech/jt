@@ -43,7 +43,7 @@ list () {
     [ "$tool" = 'all' ] && for_all_tools list && return 0
 
     assure_tools_list
-    ! grep -q "!$tool\$" "$jt_local/toolbox/tools.txt" \
+    ! grep -q "^$tool\$" "$jt_local/toolbox/tools.txt" \
         && fail "list (): Tool '$tool' does not exist."
 
     # [dxMb]: downloaded, extracted, has Makefile, built
