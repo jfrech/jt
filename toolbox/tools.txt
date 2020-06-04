@@ -5,6 +5,7 @@ cnf-fnt
 cnf-vim
 cnf-zsh
 fclr
+gradient
 j
 jprompt
 krrp
