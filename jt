@@ -31,9 +31,11 @@ for_all_tools () {
             "$1" "$ln";
         done }
 
-
-list_line () {
+list () {
+    [ ! "$#" = '1' ] && fail 'list (): Invalid arg count.'
     tool="$1"
+    [ "$tool" = 'all' ] && for_all_tools list && return 0
+
     printf '['
     # downloaded, extracted, has Makefile, built
     [ -f "$jt_local/toolbox/$tool.tar.gz"   ] && printf 'd' || printf -- '-'
@@ -41,8 +43,6 @@ list_line () {
     [ -f "$jt_local/toolbox/$tool/Makefile" ] && printf 'M' || printf -- '-'
     [ -f "$jt_local/toolbox/$tool/$tool"    ] && printf 'b' || printf -- '-'
     printf '] %s\n' "$tool" }
-list () {
-    for_all_tools list_line }
 
 download () {
     [ ! "$#" = '1' ] && fail 'download (): Invalid arg count.'
