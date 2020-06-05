@@ -7,7 +7,7 @@ jt_local="$(dirname "$0")"
 
 
 fail () {
-    printf "\33[1m\33[94mjt error:\33[0m %s\n" "$@" >&2 && exit 1 }
+    printf "\33[1m\33[94mjt error:\33[0m %s\n" "$*" >&2 && exit 1 }
 
 require () {
     for cmd in "$@"; do
@@ -152,8 +152,8 @@ internal () {
         get)      get ${@:2} ;;
         help)     help ${@:2} ;;
 
-        fail) fail ${@:2} ;;
-        *) fail "internal (): Unknown command '$1'." ;;
+        fail)     fail ${@:2} ;;
+        *)        fail "internal (): Unknown command '$1'." ;;
     esac }
 
 
