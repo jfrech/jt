@@ -6,8 +6,8 @@ jt="$(realpath "$(dirname "$0")/../../jt")"
 jt_local_tool="$(realpath "$(dirname "$0")")"
 
 Zprh_source="$(realpath "$1")"
-[ ! -f "$Zprh_source" ] && echo "Could not find source file '$Zprh_source'." \
-    && exit 1
+[ ! -f "$Zprh_source" ] \
+    && "$jt" internal fail "Could not find source file '$Zprh_source'."
 
 uuid="$(uuidgen)"
 mkdir -p "$jt_local_tool/.exec/"

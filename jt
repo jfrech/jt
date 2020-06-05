@@ -7,7 +7,7 @@ jt_local="$(dirname "$0")"
 
 
 fail () {
-    printf "\33[1m\33[94mjt error:\33[0m " >&2 && echo "$@" >&2 && exit 1 }
+    printf "\33[1m\33[94mjt error:\33[0m %s\n" "$@" >&2 && exit 1 }
 
 require () {
     for cmd in "$@"; do
@@ -152,12 +152,13 @@ internal () {
         get)      get ${@:2} ;;
         help)     help ${@:2} ;;
 
+        fail) fail ${@:2} ;;
         *) fail "internal (): Unknown command '$1'." ;;
     esac }
 
 
-require realpath dirname mv rm mkdir rmdir printf echo grep sed curl tar make \
-    gcc chmod xargs
+require realpath dirname mv rm mkdir rmdir printf grep sed curl tar make gcc \
+    chmod xargs
 
 case "$1" in
     internal) internal ${@:2} ;;
