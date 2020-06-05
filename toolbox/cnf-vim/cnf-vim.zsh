@@ -1,7 +1,7 @@
 #! /bin/zsh
 
 cd "$(dirname "$0")"
-newlines_file = "$(realpath "$(dirname "$0")/newlines.txt")"
+newlines_file="$(realpath "$(dirname "$0")/newlines.txt")"
 
 colorscheme_shell="$(./create_colorscheme "${@:1}")"
 
