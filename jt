@@ -160,8 +160,8 @@ require realpath dirname mv rm mkdir rmdir printf echo grep sed curl tar make \
     gcc chmod xargs
 
 case "$1" in
-    internal) internal ${@:2}
-    *)        run $@
+    internal) internal ${@:2} ;;
+    *)        run $@ ;;
 esac
 
 exit 0
