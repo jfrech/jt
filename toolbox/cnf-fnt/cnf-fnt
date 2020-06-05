@@ -2,8 +2,8 @@
 
 # Jonathan Frech, 2nd of June 2020
 
-fail () {
-    "$(realpath "$(dirname "$0")/../../jt")" internal fail $@ ; exit 1 }
+jt="$(realpath "$(dirname "$0")/../../jt")"
+fail () { "$jt" internal fail $@ ; exit 1 }
 fonts_directory="$HOME/.local/share/fonts"
 
 download_font () {
