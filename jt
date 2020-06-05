@@ -7,22 +7,13 @@ jt_local="$(dirname "$0")"
 
 
 fail () {
-    printf "\33[1m\33[94mjt error:\33[0m " >&2
-    echo "$@" >&2
-    exit 1 }
+    printf "\33[1m\33[94mjt error:\33[0m " >&2 && echo "$@" >&2 && exit 1 }
 
 require () {
     for cmd in "$@"; do
         [ -z "$(command -v $cmd)" ] \
             && fail "require (): Please install '$cmd'."
     done }
-require realpath dirname
-require mv rm mkdir rmdir
-require printf echo
-require grep sed
-require curl tar
-require make gcc chmod
-require xargs
 
 assure_tools_list () {
     [ -f "$jt_local/toolbox/tools.txt" ] && return 0
@@ -151,17 +142,26 @@ internal () {
         download) download ${@:2} ;;
         extract)  extract ${@:2} ;;
         build)    build ${@:2} ;;
-        run)      run ${@:2} ;;
         remove)   remove ${@:2} ;;
+
+        require)  require ${@:2} ;;
+
+        # This command is questionable.
         update)   update ${@:2} ;;
 
         get)      get ${@:2} ;;
         help)     help ${@:2} ;;
-        require)  require ${@:2} ;;
+
         *) fail "internal (): Unknown command '$1'." ;;
     esac }
 
-[ "$1" = 'internal' ] && internal ${@:2}
-[ ! "$1" = 'internal' ] && run $@
+
+require realpath dirname mv rm mkdir rmdir printf echo grep sed curl tar make \
+    gcc chmod xargs
+
+case "$1" in
+    internal) internal ${@:2}
+    *)        run $@
+esac
 
 exit 0
