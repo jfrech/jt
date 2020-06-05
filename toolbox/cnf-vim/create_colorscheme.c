@@ -1,4 +1,4 @@
-/* Jonathan Frech, 30th of April, 3rd of June 2020 */
+/* Jonathan Frech, 30th of April, 3rd, 5th of June 2020 */
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -36,14 +36,15 @@ int main(int argc, char **argv) {
                     !y && x < 2 ? l : x +4* y]);
             fprintf(stderr, "\n"); }
 
-    color_t unknown = 14, faintCC = scheme[1] - 1;
-    faintCC = faintCC < 0 ? 0 : faintCC;
+    color_t unknown = 14, faintCC = scheme[1] - 1, faintCH = faintCC - 2;
+    faintCC = faintCC < 232 ? 232 : faintCC;
+    faintCH = faintCH < 232 ? 232 : faintCH;
 
-    printf("#! /bin/zsh\n\n< j.vim.pre");
-    printf(" | sed 's/%%unknown/%d/g'", unknown);
+    printf("sed 's/%%unknown/%d/g'", unknown);
     printf(" | sed 's/%%faintCC/%d/g'", faintCC);
+    printf(" | sed 's/%%faintCH/%d/g'", faintCH);
     for (size_t j = 0; j < 8; j++)
         printf(" | sed 's/%%%s/%d/g'", color_identifiers[j], scheme[j]);
-    printf(" > j.vim\n");
+    printf("\n");
 
     return EXIT_SUCCESS; }

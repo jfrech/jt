@@ -10,14 +10,20 @@ if exists("syntax_on")
     syntax reset
 endif
 
+"
+hi CursorLine   cterm=NONE ctermfg=NONE ctermbg=NONE
+hi CursorColumn cterm=NONE ctermfg=NONE ctermbg=NONE
 
-hi Normal         ctermfg=%text
 hi NonText        ctermfg=%faint
 hi SpecialKey     ctermfg=%faint
-hi EndOfBuffer    ctermfg=%faint " TODO: why does this not reliably work?
+hi EndOfBuffer    ctermfg=%faint
+"
+
+hi Normal         ctermfg=%text
 
 hi LineNr         ctermfg=%faint
 hi ColorColumn    ctermbg=%faintCC
+hi CursorLineNr   cterm=NONE ctermfg=%accentA ctermbg=NONE
 
 hi Comment        ctermfg=%faint
 
@@ -64,3 +70,5 @@ hi Ignore         ctermfg=%unknown
 hi Error          ctermfg=%accentB ctermbg=%grayA
 
 hi Todo           ctermfg=%accentD ctermbg=%grayA cterm=bold
+
+hi Search         cterm=bold ctermfg=%text ctermbg=%accentD

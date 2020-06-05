@@ -4,8 +4,10 @@ cd "$(dirname "$0")"
 
 # 'make' will already have run on install
 make > /dev/null
-./create_colorscheme "${@:1}" | zsh
 
-cp "vimrc" "$HOME/.vimrc"
+colorscheme_shell="$(./create_colorscheme "${@:1}")"
+
+< vimrc | eval "$colorscheme_shell" > "$HOME/.vimrc"
+
 mkdir -p "$HOME/.vim/colors"
-cp "j.vim" "$HOME/.vim/colors/j.vim"
+< j.vim.pre | eval "$colorscheme_shell" > "$HOME/.vim/colors/j.vim"

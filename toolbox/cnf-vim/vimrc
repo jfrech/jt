@@ -1,18 +1,119 @@
-" Jonathan Frech's .vimrc
+" Jonathan Frech's .vimrc; last modified 5th of June 2020
 
+" enable syntax highlighting and load the j colorscheme
 set number
 set numberwidth=4
 set colorcolumn=80
-
+set cursorline
+syntax on
 colo j
+
+" silent mode -- center the current window
+" TODO :: automatically create a _long_ newline file
+let s:silence = 0
+function ToggleSilence ()
+    if s:silence
+        call win_gotoid(s:silence_left)
+        noautocmd wincmd q
+        call win_gotoid(s:silence_right)
+        noautocmd wincmd q
+
+        call win_gotoid(s:silence_back)
+        set number colorcolumn=80
+    else
+        let s:silence_back = win_getid()
+
+        hi VertSplit cterm=NONE
+        set fillchars+=vert: 
+
+        call win_gotoid(s:silence_back)
+        set nosplitright
+        vert sview ~/newlines.txt
+        set nonumber
+        set colorcolumn=0 nocursorline nocursorcolumn nolist
+        let s:silence_left = win_getid()
+
+        call win_gotoid(s:silence_back)
+        set splitright
+        vert sview ~/newlines.txt
+        set nonumber
+        set colorcolumn=0 nocursorline nocursorcolumn nolist
+        let s:silence_right = win_getid()
+
+        call win_gotoid(s:silence_back)
+        set nonumber colorcolumn=0
+        vertical resize 80
+
+        set laststatus=0
+    end
+    let s:silence = !s:silence
+endfunction
+
+nnoremap <C-j> :silent call ToggleSilence ()<cr>
+
+function UntoggleSilence ()
+    if s:silence
+        call ToggleSilence ()
+    end
+endfunction
+au QuitPre * :silent call UntoggleSilence ()
+
+" allow for a togglable cursor crosshair
+set cursorline cursorcolumn
+hi CursorLine   cterm=NONE ctermfg=NONE ctermbg=NONE
+hi CursorColumn cterm=NONE ctermfg=NONE ctermbg=NONE
+let s:crosshair = 0
+function ToggleCursorCrosshair ()
+    if s:crosshair
+        hi CursorLine   cterm=NONE ctermfg=NONE ctermbg=NONE
+        hi CursorColumn cterm=NONE ctermfg=NONE ctermbg=NONE
+    else
+        hi CursorLine   cterm=bold ctermfg=NONE ctermbg=%faintCH
+        hi CursorColumn cterm=bold ctermfg=NONE ctermbg=%faintCH
+    end
+    let s:crosshair = !s:crosshair
+endfunction
+nnoremap <C-h> :call ToggleCursorCrosshair ()<cr>
+
+" display special chars
+set list listchars=tab:>>,trail:~,nbsp:!
+let s:showInvisible = 0
+function ToggleShowInvisible ()
+    if s:showInvisible
+        set listchars=tab:>>,trail:~,nbsp:!
+        hi NonText     ctermfg=%faint
+        hi SpecialKey  ctermfg=%faint
+        hi EndOfBuffer ctermfg=%faint
+    else
+        set listchars=tab:>>,trail:~,nbsp:!,space:_,eol:`
+        hi NonText     cterm=bold ctermfg=206
+        hi SpecialKey  cterm=bold ctermfg=206
+        hi EndOfBuffer cterm=bold ctermfg=206
+    end
+    let s:showInvisible = !s:showInvisible
+endfunction
+nnoremap <C-i> :call ToggleShowInvisible ()<cr>
+
+" search highlighting
+set nohlsearch
+nnoremap <C-n> :set hlsearch!<cr>
+
+let s:hexEditing = 0
+function ToggleHexEditing ()
+    if s:hexEditing
+        execute "%!xxd -r"
+    else
+        execute "%!xxd"
+    end
+    let s:hexEditing = !s:hexEditing
+endfunction
+nnoremap <C-x> :call ToggleHexEditing ()<cr>
 
 " use four spaces instead of a tab
 set expandtab softtabstop=4 shiftwidth=4 shiftround
 
-" special characters
+" specify line breaking behaviour
 set linebreak breakindent showbreak=~:\ 
-set list listchars=tab:>>,trail:~,nbsp:!
-" set listchars=eol:.,space:.
 
 " messages and menus
 set shortmess=asTIc
