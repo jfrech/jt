@@ -5,10 +5,11 @@ set number
 set numberwidth=4
 set colorcolumn=80
 set cursorline
+set noruler
 syntax on
 colo j
 
-" silent mode -- center the current window
+" silent mode -- center the current window (a bit of a hack)
 let s:silence = 0
 function ToggleSilence ()
     if s:silence
@@ -47,8 +48,7 @@ function ToggleSilence ()
     end
     let s:silence = !s:silence
 endfunction
-
-nnoremap <C-j> :silent call ToggleSilence ()<cr>
+nnoremap <silent> <C-j> :silent call ToggleSilence ()<cr>
 
 function UntoggleSilence ()
     if s:silence
@@ -58,21 +58,23 @@ endfunction
 au QuitPre * :silent call UntoggleSilence ()
 
 " allow for a togglable cursor crosshair
-set cursorline cursorcolumn
+set cursorline nocursorcolumn
 hi CursorLine   cterm=NONE ctermfg=NONE ctermbg=NONE
 hi CursorColumn cterm=NONE ctermfg=NONE ctermbg=NONE
 let s:crosshair = 0
 function ToggleCursorCrosshair ()
     if s:crosshair
+        set cursorline nocursorcolumn
         hi CursorLine   cterm=NONE ctermfg=NONE ctermbg=NONE
         hi CursorColumn cterm=NONE ctermfg=NONE ctermbg=NONE
     else
+        set cursorline cursorcolumn
         hi CursorLine   cterm=bold ctermfg=NONE ctermbg=%faintCH
         hi CursorColumn cterm=bold ctermfg=NONE ctermbg=%faintCH
     end
     let s:crosshair = !s:crosshair
 endfunction
-nnoremap <C-h> :call ToggleCursorCrosshair ()<cr>
+nnoremap <silent> <C-h> :call ToggleCursorCrosshair ()<cr>
 
 " display special chars
 set list listchars=tab:>>,trail:~,nbsp:!
@@ -91,12 +93,13 @@ function ToggleShowInvisible ()
     end
     let s:showInvisible = !s:showInvisible
 endfunction
-nnoremap <C-i> :call ToggleShowInvisible ()<cr>
+nnoremap <silent> <C-i> :call ToggleShowInvisible ()<cr>
 
 " search highlighting
 set nohlsearch
-nnoremap <C-n> :set hlsearch!<cr>
+nnoremap <silent> <C-n> :set hlsearch!<cr>
 
+" run xxd on current buffer
 let s:hexEditing = 0
 function ToggleHexEditing ()
     if s:hexEditing
@@ -118,7 +121,7 @@ set linebreak breakindent showbreak=~:\
 set shortmess=asTIc
 set wildmenu wildmode=longest,full
 
-" by default, splits shall open above and to the left
+" by default, splits now shall open above and to the left
 set splitbelow splitright
 
 " ban arrow keys
