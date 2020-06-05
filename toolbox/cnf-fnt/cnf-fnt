@@ -2,15 +2,16 @@
 
 # Jonathan Frech, 2nd of June 2020
 
-fail="$(realpath "$(dirname "$0")/../../jt")" internal fail
+jt="$(realpath "$(dirname "$0")/../../jt")"
 fonts_directory="$HOME/.local/share/fonts"
 
 download_font () {
     url="$1" base_name="$2" extension="$3"
-    [ ! "$extension" = 'zip' ] && fail "Unknown extension '$extension'."
+    [ ! "$extension" = 'zip' ] \
+        && "$jt" internal fail "Unknown extension '$extension'."
 
-    [ -e "$fonts_directory/$base_name" ] && fail "A font of the name" \
-        "'$base_name' appears to already be installed."
+    [ -e "$fonts_directory/$base_name" ] && "$jt" internal fail \
+        "A font of the name '$base_name' appears to already be installed."
     mkdir -p "$fonts_directory/$base_name"
 
     curl --silent --fail "$url/$base_name.$extension" \
