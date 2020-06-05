@@ -1,13 +1,13 @@
 #! /bin/zsh
 
 jt="$(realpath "$(dirname "$0")/../../jt")"
+fail () { "$jt" internal fail $@ ; exit 1 }
 "$jt" internal require uuidgen
 
 jt_local_tool="$(realpath "$(dirname "$0")")"
 
 Zprh_source="$(realpath "$1")"
-[ ! -f "$Zprh_source" ] \
-    && "$jt" internal fail "Could not find source file '$Zprh_source'."
+[ ! -f "$Zprh_source" ] && fail "Could not find source file '$Zprh_source'."
 
 uuid="$(uuidgen)"
 mkdir -p "$jt_local_tool/.exec/"
