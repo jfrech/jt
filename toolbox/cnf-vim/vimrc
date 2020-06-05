@@ -9,7 +9,6 @@ syntax on
 colo j
 
 " silent mode -- center the current window
-" TODO :: automatically create a _long_ newline file
 let s:silence = 0
 function ToggleSilence ()
     if s:silence
@@ -28,14 +27,14 @@ function ToggleSilence ()
 
         call win_gotoid(s:silence_back)
         set nosplitright
-        vert sview ~/newlines.txt
+        vert sview %newlines_file
         set nonumber
         set colorcolumn=0 nocursorline nocursorcolumn nolist
         let s:silence_left = win_getid()
 
         call win_gotoid(s:silence_back)
         set splitright
-        vert sview ~/newlines.txt
+        vert sview %newlines_file
         set nonumber
         set colorcolumn=0 nocursorline nocursorcolumn nolist
         let s:silence_right = win_getid()
