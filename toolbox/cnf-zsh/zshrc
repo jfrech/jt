@@ -1,5 +1,9 @@
+# Jonathan Frech's zshrc; last modified 6th of June 2020
+
 bindkey -v
 export KEYTIMEOUT=1
+
+export EDITOR='vim'
 
 "$jt_local/jt" internal build jprompt
 setopt PROMPT_SUBST

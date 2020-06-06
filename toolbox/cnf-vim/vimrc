@@ -1,5 +1,4 @@
-" Jonathan Frech's .vimrc; last modified 5th of June 2020
-
+" Jonathan Frech's .vimrc; last modified 6th of June 2020
 " enable syntax highlighting and load the j colorscheme
 set number
 set numberwidth=4
@@ -49,7 +48,6 @@ function ToggleSilence ()
     let s:silence = !s:silence
 endfunction
 nnoremap <silent> <C-j> :silent call ToggleSilence ()<cr>
-
 function UntoggleSilence ()
     if s:silence
         call ToggleSilence ()
@@ -110,6 +108,9 @@ function ToggleHexEditing ()
     let s:hexEditing = !s:hexEditing
 endfunction
 nnoremap <C-x> :call ToggleHexEditing ()<cr>
+
+" insert the current date
+inoremap <C-d> <cr>$<esc>k:r! LC_ALL=en_NZ.utf8 date '+\%dth of \%B \%Y' \| sed 's/^0//; s/1th/1st/; s/2th/2nd/; s/3th/3rd/'<cr>kgJgJa<bs>
 
 " use four spaces instead of a tab
 set expandtab softtabstop=4 shiftwidth=4 shiftround
