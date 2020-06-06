@@ -4,7 +4,6 @@
 
 jt_repository=""
 jt_local="$(dirname "$0")"
-tool=""
 
 
 fail () {
@@ -24,15 +23,15 @@ assure_tools_list () {
     mv "$jt_local/.download/tools.txt" "$jt_local/toolbox/tools.txt" }
 
 for_all_tools () {
-    [ ! "$#" = '1' ] && fail 'for_all_tools (): Invalid arg count.'
     assure_tools_list
     < "$jt_local/toolbox/tools.txt" | while read ln; do "$1" "$ln"; done }
 enable_all_version () {
-    f="$1" ; [ ! "$#" = '2' ] && fail "$f (): Invalid arg count."
-    tool="$2" ; [ "$tool" = 'all' ] && for_all_tools "$f" && return 0
-    "$f" }
+    [ ! "$#" = '2' ] && fail "$1 (): Invalid arg count."
+    [ "$2" = 'all' ] && for_all_tools "$1" && return 0
+    "$1" ${@:2} }
 
 list () {
+    tool="$1"
     assure_tools_list
     ! grep -q "^$tool\$" "$jt_local/toolbox/tools.txt" \
         && fail "list (): Tool '$tool' does not exist."
@@ -46,6 +45,7 @@ list () {
     printf '] %s\n' "$tool" }
 
 download () {
+    tool="$1"
     [ -f "$jt_local/toolbox/$tool.tar.gz" ] && return 0
 
     mkdir -p "$jt_local/.download"
@@ -57,12 +57,14 @@ download () {
     mv "$jt_local/.download/$tool.tar.gz" "$jt_local/toolbox/$tool.tar.gz" }
 
 extract () {
+    tool="$1"
     [ -d "$jt_local/toolbox/$tool" ] && return 0
     [ ! -f "$jt_local/toolbox/$tool.tar.gz" ] && download "$tool"
 
     tar -xf "$jt_local/toolbox/$tool.tar.gz" -C "$jt_local/toolbox" }
 
 build () {
+    tool="$1"
     [ -f "$jt_local/toolbox/$tool/$tool" ] && return 0
     [ ! -d "$jt_local/toolbox/$tool" ] && extract "$tool"
 
@@ -74,6 +76,7 @@ build () {
     chmod +x "$jt_local/toolbox/$tool/$tool" }
 
 run () {
+    tool="$1"
     [ -z "$1" ] && fail 'run (): Invalid arg count.'
     tool="$1" ; [ "$tool" = 'all' ] && fail 'run (): Refusing to run all tools.'
 
@@ -84,6 +87,7 @@ run () {
     "$jt_local/toolbox/$tool/$tool" ${@:2} }
 
 remove () {
+    tool="$1"
     rm -rf "$jt_local/toolbox/$tool.tar.gz" "$jt_local/toolbox/$tool" }
 
 update_self () {
@@ -97,6 +101,7 @@ update_self () {
     mv "$jt_local/.download/jt" "$jt_local/jt"
     chmod +x "$jt_local/jt" }
 update () {
+    tool="$1"
     [ "$tool" = 'self' ] && update_self && return 0
 
     rebuild=''
