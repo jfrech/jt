@@ -4,6 +4,7 @@
 
 jt_repository=""
 jt_local="$(dirname "$0")"
+tool=""
 
 
 fail () {
@@ -24,15 +25,14 @@ assure_tools_list () {
 
 for_all_tools () {
     [ ! "$#" = '1' ] && fail 'for_all_tools (): Invalid arg count.'
-
     assure_tools_list
     < "$jt_local/toolbox/tools.txt" | while read ln; do "$1" "$ln"; done }
+enable_all_version () {
+    f="$1" ; [ ! "$#" = '2' ] && fail "$f (): Invalid arg count."
+    tool="$2" ; [ "$tool" = 'all' ] && for_all_tools "$f" && return 0
+    "$f" }
 
 list () {
-    [ ! "$#" = '1' ] && for_all_tools list && return 0
-    tool="$1"
-    [ "$tool" = 'all' ] && for_all_tools list && return 0
-
     assure_tools_list
     ! grep -q "^$tool\$" "$jt_local/toolbox/tools.txt" \
         && fail "list (): Tool '$tool' does not exist."
@@ -46,10 +46,6 @@ list () {
     printf '] %s\n' "$tool" }
 
 download () {
-    [ ! "$#" = '1' ] && fail 'download (): Invalid arg count.'
-    tool="$1"
-    [ "$tool" = 'all' ] && for_all_tools download && return 0
-
     [ -f "$jt_local/toolbox/$tool.tar.gz" ] && return 0
 
     mkdir -p "$jt_local/.download"
@@ -61,20 +57,12 @@ download () {
     mv "$jt_local/.download/$tool.tar.gz" "$jt_local/toolbox/$tool.tar.gz" }
 
 extract () {
-    [ ! "$#" = '1' ] && fail 'extract (): Invalid arg count.'
-    tool="$1"
-    [ "$tool" = 'all' ] && for_all_tools extract && return 0
-
     [ -d "$jt_local/toolbox/$tool" ] && return 0
     [ ! -f "$jt_local/toolbox/$tool.tar.gz" ] && download "$tool"
 
     tar -xf "$jt_local/toolbox/$tool.tar.gz" -C "$jt_local/toolbox" }
 
 build () {
-    [ ! "$#" = '1' ] && fail 'build (): Invalid arg count.'
-    tool="$1"
-    [ "$tool" = 'all' ] && for_all_tools build && return 0
-
     [ -f "$jt_local/toolbox/$tool/$tool" ] && return 0
     [ ! -d "$jt_local/toolbox/$tool" ] && extract "$tool"
 
@@ -87,8 +75,7 @@ build () {
 
 run () {
     [ -z "$1" ] && fail 'run (): Invalid arg count.'
-    tool="$1"
-    [ "$tool" = 'all' ] && fail 'run (): Refusing to run all tools.'
+    tool="$1" ; [ "$tool" = 'all' ] && fail 'run (): Refusing to run all tools.'
 
     [ ! -f "$jt_local/toolbox/$tool/$tool" ] && build "$tool"
 
@@ -97,10 +84,6 @@ run () {
     "$jt_local/toolbox/$tool/$tool" ${@:2} }
 
 remove () {
-    [ ! "$#" = '1' ] && fail 'remove (): Invalid arg count.'
-    tool="$1"
-    [ "$tool" = 'all' ] && for_all_tools remove && return 0
-
     rm -rf "$jt_local/toolbox/$tool.tar.gz" "$jt_local/toolbox/$tool" }
 
 update_self () {
@@ -114,9 +97,6 @@ update_self () {
     mv "$jt_local/.download/jt" "$jt_local/jt"
     chmod +x "$jt_local/jt" }
 update () {
-    [ ! "$#" = '1' ] && fail 'update (): Invalid arg count.'
-    tool="$1"
-    [ "$tool" = 'all' ] && for_all_tools update && return 0
     [ "$tool" = 'self' ] && update_self && return 0
 
     rebuild=''
@@ -137,17 +117,17 @@ internal () {
     rm -rf "$jt_local/toolbox/tools.txt"
 
     case "$1" in
-        list)     list ${@:2} ;;
+        list)     enable_all_version list ${@:2} ;;
 
-        download) download ${@:2} ;;
-        extract)  extract ${@:2} ;;
-        build)    build ${@:2} ;;
-        remove)   remove ${@:2} ;;
+        download) enable_all_version download ${@:2} ;;
+        extract)  enable_all_version extract ${@:2} ;;
+        build)    enable_all_version build ${@:2} ;;
+        remove)   enable_all_version remove ${@:2} ;;
 
         require)  require ${@:2} ;;
 
         # This command is questionable.
-        update)   update ${@:2} ;;
+        update)   enable_all_version update ${@:2} ;;
 
         get)      get ${@:2} ;;
         help)     help ${@:2} ;;
@@ -163,6 +143,4 @@ require realpath dirname mv rm mkdir rmdir printf grep sed curl tar make gcc \
 case "$1" in
     internal) internal ${@:2} ;;
     *)        run $@ ;;
-esac
-
-exit 0
+esac && exit 0
