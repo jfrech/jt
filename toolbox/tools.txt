@@ -4,6 +4,7 @@ cnf-all
 cnf-fnt
 cnf-vim
 cnf-zsh
+dev
 fclr
 gradient
 j

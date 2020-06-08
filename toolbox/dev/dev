@@ -1,0 +1,19 @@
+#! /bin/zsh
+
+fail () { jt internal fail $@ ; exit 1 }
+
+tool_origin=''
+find_tool_origin () {
+    [ ! -d "$1" ] && return
+    [ "$(basename "$(dirname "$1")")" = 'toolbox' ] \
+        && tool_origin="$1" && return
+    [ ! "$1" = '/' ] && find_tool_origin "$(dirname "$1")" }
+
+root="$(realpath "$PWD")"
+find_tool_origin "$root"
+[ -z "$tool_origin" ] && fail "Could not find the tool's origin."
+tool="$(basename "$tool_origin")"
+
+jt internal remove "$tool"
+cd "$tool_origin/.." 
+tar -vcz "$tool" > "$HOME/.jt/toolbox/$tool.tar.gz"
