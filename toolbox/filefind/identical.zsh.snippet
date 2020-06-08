@@ -1,0 +1,8 @@
+function identical () {
+    [ "$#" -le '1' ] && printf '\33[91mInternal error.\33[0m\n' && return 1
+    printf 'The following \33[94m%d files\33[0m are identical.\n' "$#"
+    j=0; for f in $@; do printf '%d) \33[94m"%q"\33[0m\n' "((++j))" "$f"; done
+
+    # WIP
+    printf '\33[3mRemoval functionality is work in progress ...\33[0m\n'
+}
