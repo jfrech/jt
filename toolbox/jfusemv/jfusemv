@@ -23,7 +23,7 @@ handle () {
     [ -f "$dst_f" ] && cmp "$src_f" "$dst_f" >/dev/null \
         && printf 'd %s\n' "$src_f" && ((duplicate_files++)) && return
     [ -f "$dst_f" ] \
-        && printf 'C %s\n' "$src_f" && ((collision_files++) && return
+        && printf 'C %s\n' "$src_f" && ((collision_files++)) && return
     print 'E %s\n' "$src_f" && ((error_files++)) && return }
 
 printf '[Legend] n: new file, d: duplicate file, C: file collision, E: error\n'
