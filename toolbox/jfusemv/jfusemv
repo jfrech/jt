@@ -26,17 +26,17 @@ handle () {
 
     error_files+=("$src_f") && return }
 
-printf '[Legend] n: new file, d: duplicate file, C: file collision, E: error\n'
-printf 'Digest for the fusion of\n'
-printf '    "%q"\n' "$src"
-printf '    ->> "%q":\n' "$dst"
 
 find "$src" -type f | sort | while read f; do handle "$f"; done
 
-printf 'duplicate_files=%d\n' "$#duplicate_files"
-print 'new_files=%d:\n' "$#new_files"
-for n in $new_files; do printf 'n %q\n' "$n"; done
-print 'collision_files=%d:\n' "$#collision_files"
-for C in $collision_files; do printf 'C %q\n' "$C"; done
-print 'error_files=%d:\n' "$#error_files"
-for E in $error_files; do printf 'E %q\n' "$E"; done
+printf 'Digest for the fusion of\n'
+printf '    "%q"\n' "$src"
+printf '    ->> "%q":\n' "$dst"
+printf '* duplicate_files (%d):\n' "$#duplicate_files"
+printf '    (omitted)\n'
+printf '* new_files (%d):\n' "$#new_files"
+for n in $new_files; do printf '    n "%q"\n' "$n"; done
+printf '* collision_files (%d):\n' "$#collision_files"
+for C in $collision_files; do printf '    C "%q"\n' "$C"; done
+printf '* error_files (%d):\n' "$#error_files"
+for E in $error_files; do printf '    E "%q"\n' "$E"; done
