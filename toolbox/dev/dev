@@ -16,6 +16,6 @@ tool="$(basename "$tool_origin")"
 
 jt internal remove "$tool"
 cd "$tool_origin/.." 
-tar -vcz "$tool" > "$HOME/.jt/toolbox/$tool.tar.gz"
+tar -cz "$tool" > "$HOME/.jt/toolbox/$tool.tar.gz"
 
 jt "$tool" $@
