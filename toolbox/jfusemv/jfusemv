@@ -36,7 +36,7 @@ for C in $collision_files; do printf '\33[93mC "%q"\33[0m\n' "$C"; done
 for E in $error_files    ; do printf '\33[91mE "%q"\33[0m\n' "$E"; done
 
 summary () {
-    [ ! "$2" = '0' ] && printf '%s' "$1"
+    [ ! "$2" = '0' ] && printf "$1"
     printf '%d%s file' "$2" "$3"
     [ ! "$2" = '1' ] && printf 's'
     [ ! "$2" = '0' ] && printf '\33[0m' }
