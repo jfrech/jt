@@ -14,8 +14,9 @@ find_tool_origin "$root"
 [ -z "$tool_origin" ] && fail "Could not find the tool's origin."
 tool="$(basename "$tool_origin")"
 
-jt internal remove "$tool"
-cd "$tool_origin/.." 
-tar -cz "$tool" > "$HOME/.jt/toolbox/$tool.tar.gz"
+install () {
+    jt internal remove "$tool"
+    cd "$tool_origin/.."
+    tar -cz "$tool" > "$HOME/.jt/toolbox/$tool.tar.gz" }
 
-jt "$tool" $@
+install && jt "$tool" $@
