@@ -30,7 +30,7 @@ handle () {
 find "$src" -type f | sort | while read f; do handle "$f"; done
 
 printf 'Looking at the fusion "%q" ->> "%q".\n' "$src" "$dst"
-for n in $duplicate_files; do printf '    \33[4md "%q"\33[0m\n'  "$n"; done
-for n in $new_files      ; do printf '    \33[10mn "%q"\33[0m\n' "$n"; done
-for C in $collision_files; do printf '    \33[11mC "%q"\33[0m\n' "$C"; done
-for E in $error_files    ; do printf '    \33[9mE "%q"\33[0m\n'  "$E"; done
+for n in $duplicate_files; do printf '    \33[34md "%q"\33[0m\n' "$n"; done
+for n in $new_files      ; do printf '    \33[92mn "%q"\33[0m\n' "$n"; done
+for C in $collision_files; do printf '    \33[93mC "%q"\33[0m\n' "$C"; done
+for E in $error_files    ; do printf '    \33[91mE "%q"\33[0m\n' "$E"; done
