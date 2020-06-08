@@ -41,8 +41,7 @@ summary () {
     [ ! "$2" = '1' ] && printf 's'
     [ ! "$2" = '0' ] && printf '\33[0m' }
 printf 'Summary of the fusion analysis "%q" ->> "%q":\n' "$src" "$dst"
-summary '\33[34m' "$#duplicate_files" 'duplicate' && printf ', '
-summary '\33[92m' "$#new_files" 'new' && printf ', '
-summary '\33[93m' "$#collision_files" 'collision' && printf ', '
-summary '\33[91m' "$#error_files" 'error' && printf ', '
-printf '\n'
+summary '\33[34m' "$#duplicate_files" 'duplicate' ; printf ', '
+summary '\33[92m' "$#new_files" 'new' ; printf ', '
+summary '\33[93m' "$#collision_files" 'collision' ; printf ', '
+summary '\33[91m' "$#error_files" 'error' ; printf '\n'
