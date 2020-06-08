@@ -13,7 +13,7 @@ root="$(realpath "$1")"
 hash_files=()
 handle () {
     hf="$("$hashsum" "$1")"
-    h="${hf%% *}" f="${hf##* }"
+    h="${hf%% *}" f="${hf#* }"
     hash_files+=("$h $f")
     printf '# %s %s\n' "$h" "$f" }
 find "$root" -type f | while read f; do handle "$f"; done
@@ -25,7 +25,7 @@ for hf in $hash_files; do
 done | sort | uniq -d | while read uniq_h; do
     files_of_same_hash=()
     for hf in $hash_files; do
-        h="${hf%% *}" f="${hf##* }"
+        h="${hf%% *}" f="${hf#* }"
         [ "$uniq_h" = "$h" ] || continue
         files_of_same_hash+=("$f")
     done
