@@ -1,0 +1,27 @@
+#! /bin/zsh
+
+jt="$(realpath "$(dirname "$0")/../../jt")"
+fail () { "$jt" internal fail $@ ; exit 1 }
+
+[ ! "$#" = '2' ] && fail "Need exactly two arguments."
+src="$(realpath "$PWD/$1")" dst="$(realpath "$PWD/$2")"
+[ ! -d "$src" ] && fail "Source needs to be a directory, not '$src'."
+[ ! -d "$dst" ] && fail "Destination needs to be a directory, not '$dst'."
+
+build_script () {
+    src_f="$1" dst_f="$dst/$(realpath --relative-to="$src" "$1")"
+    [ ! -e "$dst_f" ] \
+        && printf 'mkdir -p %s\n' "$(dirname "$dst_f")" \
+        && printf 'mv "%s" "%s"\n' "$src_f" "$dst_f" && return
+    printf 'WIP\n' }
+
+handle () {
+    src_f="$1" dst_f="$dst/$(realpath --relative-to="$src" "$1")"
+    [ ! -e "$dst_f" ] && printf 'n %s\n' "$src_f" && return
+    [ -f "$dst_f" ] && cmp "$src_f" "$dst_f" >/dev/null \
+        && printf 'd %s\n' "$src_f" && return
+    [ -f "$dst_f" ] && printf 'C %s\n' "$src_f" && return
+    print 'E %s\n' "$src_f" && return }
+
+printf '[Legend] n: new file, d: duplicate file, C: file collision, E: error\n'
+find "$src" -type f | sort | while read f; do handle "$f"; done
