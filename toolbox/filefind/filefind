@@ -15,7 +15,7 @@ handle () {
     hf="$("$hashsum" "$1")"
     h="${hf%% *}" f="${hf#*  }"
     hash_files+=("$h $f")
-    printf '# %s %s\n' "$h" "$f" }
+    printf '# %s "%q"\n' "$h" "$f" }
 find "$root" -type f | while read f; do handle "$f"; done
 printf '\n'
 
