@@ -29,14 +29,8 @@ handle () {
 
 find "$src" -type f | sort | while read f; do handle "$f"; done
 
-printf 'Digest for the fusion of\n'
-printf '    "%q"\n' "$src"
-printf '    ->> "%q":\n' "$dst"
-printf '* duplicate_files (%d):\n' "$#duplicate_files"
-printf '    (omitted)\n'
-printf '* new_files (%d):\n' "$#new_files"
-for n in $new_files; do printf '    n "%q"\n' "$n"; done
-printf '* collision_files (%d):\n' "$#collision_files"
-for C in $collision_files; do printf '    C "%q"\n' "$C"; done
-printf '* error_files (%d):\n' "$#error_files"
-for E in $error_files; do printf '    E "%q"\n' "$E"; done
+printf 'Looking at the fusion "%q" ->> "%q".\n' "$src" "$dst"
+for n in $duplicate_files; do printf '    \33[4md "%q"\33[0m\n'  "$n"; done
+for n in $new_files      ; do printf '    \33[10mn "%q"\33[0m\n' "$n"; done
+for C in $collision_files; do printf '    \33[11mC "%q"\33[0m\n' "$C"; done
+for E in $error_files    ; do printf '    \33[9mE "%q"\33[0m\n'  "$E"; done
