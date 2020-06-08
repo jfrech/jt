@@ -19,20 +19,24 @@ new_files=() duplicate_files=() collision_files=() error_files=()
 
 handle () {
     src_f="$1" dst_f="$dst/$(realpath --relative-to="$src" "$1")"
-    [ ! -e "$dst_f" ] \
-        && printf 'n "%q"\n' "$src_f" && new_files+=("$src_f") && return
+    [ ! -e "$dst_f" ] && new_files+=("$src_f") && return
     [ -f "$dst_f" ] && cmp "$src_f" "$dst_f" >/dev/null \
-        && printf 'd "%q"\n' "$src_f" && duplicate_files+=("$src_f") && return
-    [ -f "$dst_f" ] \
-        && printf 'C "%q"\n' "$src_f" && collision_files+=("$src_f") && return
-    printf 'E %q\n' "$src_f" && error_files+=("$src_f") && return }
+        && duplicate_files+=("$src_f") && return
+    [ -f "$dst_f" ] collision_files+=("$src_f") && return
+
+    error_files+=("$src_f") && return }
 
 printf '[Legend] n: new file, d: duplicate file, C: file collision, E: error\n'
-find "$src" -type f | sort | while read f; do handle "$f"; done
-printf 'new_files=%d, duplicate_files=%d, collision_files=%d, error_files=%d\n' \
-    "$#new_files" "$#duplicate_files" "$#collision_files" "$#error_files"
+printf 'Digest for the fusion of\n'
+printf '    "%q"\n' "$src"
+printf '    ->> "%q":\n' "$dst"
 
-printf 'Digest:\n'
+find "$src" -type f | sort | while read f; do handle "$f"; done
+
+printf 'duplicate_files=%d\n' "$#duplicate_files"
+print 'new_files=%d:\n' "$#new_files"
 for n in $new_files; do printf 'n %q\n' "$n"; done
+print 'collision_files=%d:\n' "$#collision_files"
 for C in $collision_files; do printf 'C %q\n' "$C"; done
+print 'error_files=%d:\n' "$#error_files"
 for E in $error_files; do printf 'E %q\n' "$E"; done
