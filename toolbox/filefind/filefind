@@ -36,7 +36,7 @@ done | sort | uniq -d | while read uniq_h; do
     [ "$#files_of_same_hash" -le '1' ] && fail 'Internal catastrophy.'
     first_file="${files_of_same_hash[1]}"
     for fosh in $files_of_same_hash; do
-        cmp "$first_file" "$fosh" || fail 'Hash collision.'
+        cmp >/dev/null "$first_file" "$fosh" || fail 'Hash collision.'
     done
 
     printf 'identical'

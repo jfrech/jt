@@ -1,10 +1,17 @@
 function identical () {
-    [ "$#" -le '1' ] && printf '\33[91mInternal error.\33[0m\n' && return 1
+    [ "$#" -le '1' ] && printf '\33[91mInternal error.\33[0m\n' && exit 1
+
     printf 'The following \33[94m%d files\33[0m are identical.\n' "$#"
     j=0; for f in $@; do printf '%d) \33[94m"%q"\33[0m\n' "((++j))" "$f"; done
 
+    for f in $@; do
+        ! cmp >/dev/null "${@[1]}" "$f" \
+            && printf '\33[91mContrary to the above, the files are ' \
+            && printf 'not identical.\33[0m\n' && exit 1
+    done
+
     # WIP
-    printf '\33[3mRemoval functionality is work in progress ...\33[0m\n'
     for f in $@; do md5sum "$f"; done
+    printf '\33[3mRemoval functionality is work in progress ...\33[0m\n'
     printf '[] ...\n'
 }
