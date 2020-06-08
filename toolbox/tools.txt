@@ -6,6 +6,7 @@ cnf-vim
 cnf-zsh
 dev
 fclr
+filefind
 gradient
 j
 jfusemv
