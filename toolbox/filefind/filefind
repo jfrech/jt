@@ -13,7 +13,7 @@ root="$(realpath "$1")"
 hash_files=()
 handle () {
     hf="$("$hashsum" "$1")"
-    h="${hf%% *}" f="${hf#* }"
+    h="${hf%% *}" f="${hf#*  }"
     hash_files+=("$h $f")
     printf '# %s %s\n' "$h" "$f" }
 find "$root" -type f | while read f; do handle "$f"; done
