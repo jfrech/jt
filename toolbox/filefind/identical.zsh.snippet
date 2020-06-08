@@ -5,4 +5,6 @@ function identical () {
 
     # WIP
     printf '\33[3mRemoval functionality is work in progress ...\33[0m\n'
+    for f in $@; do md5sum "$f"; done
+    printf '[] ...\n'
 }

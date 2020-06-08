@@ -39,7 +39,7 @@ done | sort | uniq -d | while read uniq_h; do
         cmp "$first_file" "$fosh" || fail 'Hash collision.'
     done
 
-    printf 'identical' "$uniq_h"
-    for fosh in $files_of_same_hash; do printf ' "%q"' "$fosh"; done
+    printf 'identical'
+    for fosh in $files_of_same_hash; do printf " %q" "$fosh"; done
     printf '\n'
 done
