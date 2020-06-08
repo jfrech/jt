@@ -22,7 +22,7 @@ handle () {
     [ ! -e "$dst_f" ] && new_files+=("$src_f") && return
     [ -f "$dst_f" ] && cmp "$src_f" "$dst_f" >/dev/null \
         && duplicate_files+=("$src_f") && return
-    [ -f "$dst_f" ] collision_files+=("$src_f") && return
+    [ -f "$dst_f" ] && collision_files+=("$src_f") && return
 
     error_files+=("$src_f") && return }
 
