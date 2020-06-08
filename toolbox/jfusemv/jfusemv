@@ -15,13 +15,18 @@ build_script () {
         && printf 'mv "%s" "%s"\n' "$src_f" "$dst_f" && return
     printf 'WIP\n' }
 
+new_files=0 duplicate_files=0 collision_files=0 error_files=0
 handle () {
     src_f="$1" dst_f="$dst/$(realpath --relative-to="$src" "$1")"
-    [ ! -e "$dst_f" ] && printf 'n %s\n' "$src_f" && return
+    [ ! -e "$dst_f" ] \
+        && printf 'n %s\n' "$src_f" && ((new_files++)) && return
     [ -f "$dst_f" ] && cmp "$src_f" "$dst_f" >/dev/null \
-        && printf 'd %s\n' "$src_f" && return
-    [ -f "$dst_f" ] && printf 'C %s\n' "$src_f" && return
-    print 'E %s\n' "$src_f" && return }
+        && printf 'd %s\n' "$src_f" && ((duplicate_files++)) && return
+    [ -f "$dst_f" ] \
+        && printf 'C %s\n' "$src_f" && ((collision_files++) && return
+    print 'E %s\n' "$src_f" && ((error_files++)) && return }
 
 printf '[Legend] n: new file, d: duplicate file, C: file collision, E: error\n'
 find "$src" -type f | sort | while read f; do handle "$f"; done
+printf 'new_files=%d, duplicate_files=%d, collision_files=%d, error_files=%d\n' \
+    "$new_files" "$duplicate_files" "$collision_files" "$error_files"
