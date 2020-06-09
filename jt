@@ -2,17 +2,20 @@
 
 # Jonathan Frech, April to June 2020
 
-jt_repository=""
+jt_repository="https://raw.githubusercontent.com/jfrech/jt/master"
 jt_local="$(dirname "$0")"
 
 
-fail () {
-    printf "\33[1m\33[94mjt error:\33[0m %s\n" "$*" >&2 && exit 1 }
+# fail () {
+#     printf "\33[1m\33[94mjt error:\33[0m %s\n" "$@" >&2 && exit 1 }
+fail_in () {
+    printf "\33[1m\33[94mjt error (in '%s')\33[0m %s\n" "$1" "${@:2}" >&2 \
+        && exit 1 }
 
 require () {
     for cmd in "$@"; do
         [ -z "$(command -v $cmd)" ] \
-            && fail "require (): Please install '$cmd'."
+            && fail_in 'require ()' "Please install '$cmd'."
     done }
 
 assure_tools_list () {
@@ -26,7 +29,7 @@ for_all_tools () {
     assure_tools_list
     < "$jt_local/toolbox/tools.txt" | while read ln; do "$1" "$ln"; done }
 enable_all_version () {
-    [ ! "$#" = '2' ] && fail "$1 (): Invalid arg count."
+    [ ! "$#" = '2' ] && fail_in "$1 ()" 'Invalid arg count.'
     [ "$2" = 'all' ] && for_all_tools "$1" && return 0
     "$1" ${@:2} }
 
@@ -34,7 +37,7 @@ list () {
     tool="$1"
     assure_tools_list
     ! grep -q "^$tool\$" "$jt_local/toolbox/tools.txt" \
-        && fail "list (): Tool '$tool' does not exist."
+        && fail_in 'list ()' "Tool '$tool' does not exist."
 
     # [dxMb]: downloaded, extracted, has Makefile, built
     printf '['
@@ -51,7 +54,7 @@ download () {
     mkdir -p "$jt_local/.download"
     curl --fail --silent "$jt_repository/toolbox/$tool.tar.gz" \
         > "$jt_local/.download/$tool.tar.gz" \
-        || fail "download (): Failed to download '$tool'."
+        || fail_in 'download ()' "Failed to download '$tool'."
 
     mkdir -p "$jt_local/toolbox"
     mv "$jt_local/.download/$tool.tar.gz" "$jt_local/toolbox/$tool.tar.gz" }
@@ -72,18 +75,19 @@ build () {
         && make --silent -C "$jt_local/toolbox/$tool" > /dev/null
 
     [ ! -f "$jt_local/toolbox/$tool/$tool" ] \
-        && fail "build (): Could not unpack '$tool'."
+        && fail_in 'build ()' "Could not unpack '$tool'."
     chmod +x "$jt_local/toolbox/$tool/$tool" }
 
 run () {
     tool="$1"
-    [ -z "$1" ] && fail 'run (): Invalid arg count.'
-    tool="$1" ; [ "$tool" = 'all' ] && fail 'run (): Refusing to run all tools.'
+    [ -z "$1" ] && fail_in 'run ()' 'Invalid arg count.'
+    tool="$1"
+    [ "$tool" = 'all' ] && fail_in 'run ()' 'Refusing to run all tools.'
 
     [ ! -f "$jt_local/toolbox/$tool/$tool" ] && build "$tool"
 
     [ ! -f "$jt_local/toolbox/$tool/$tool" ] \
-        && fail "run (): Could not find tool '$tool'."
+        && fail_in 'run ()' "Could not find tool '$tool'."
     "$jt_local/toolbox/$tool/$tool" ${@:2} }
 
 remove () {
@@ -95,7 +99,7 @@ update_self () {
     curl --fail --silent "$jt_repository/jt" \
         | sed "s|^jt_repository=\"[^\"]*\"\$|jt_repository=\"$jt_repository\"|" \
         > "$jt_local/.download/jt" \
-        || fail "update_self (): Failed to download 'jt'."
+        || fail_in 'update_self ()' "Failed to download 'jt'."
 
     mkdir -p "$jt_local"
     mv "$jt_local/.download/jt" "$jt_local/jt"
@@ -110,13 +114,13 @@ update () {
 
     [ -n "$rebuild" ] && build "$tool" && return 0
 
-    fail "update (): Cannot update uninstalled tool '$tool'." }
+    fail_in 'update ()' "Cannot update uninstalled tool '$tool'." }
 
 get () {
-    fail 'get (): Not yet implemented.' }
+    fail_in 'get ()' 'Not yet implemented.' }
 
 help () {
-    fail 'help (): Not yet implemented.' }
+    fail_in 'help ()' 'Not yet implemented.' }
 
 internal () {
     rm -rf "$jt_local/toolbox/tools.txt"
@@ -137,8 +141,8 @@ internal () {
         get)      get ${@:2} ;;
         help)     help ${@:2} ;;
 
-        fail)     fail ${@:2} ;;
-        *)        fail "internal (): Unknown command '$1'." ;;
+        fail)     fail_in "$1" ${@:2} ;;
+        *)        fail_in 'internal ()' "Unknown command '$1'." ;;
     esac }
 
 
