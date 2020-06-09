@@ -18,18 +18,19 @@ function handle_identicals () {
     printf '\nThe following \33[94m%d files\33[0m are identical.\n' "$#"
     j=0; for f in $@; do printf '%d) \33[94m"%q"\33[0m\n' "((++j))" "$f"; done
 
-    for f in $@; do
-        ! cmp >/dev/null "${@[1]}" "$f" \
-            && fail 'handle_identicals (): Contrary to the above,' \
-                    ' the files are not identical.\33[0m\n'
-    done
-
     printf 'Which file do you want to keep (1-%d)? ' "$#"
-    printf "\33[3mAll other files will be removed. Type '0' to do nothing.\33[0m > "
+    printf '\33[3mAll other files will be removed. '
+    printf "Type '0' to do nothing.\33[0m > "
     read keep; keep="$(printf '%d' "$keep")"
     [ "$keep" -lt '1' ] && keep=0
     [ "$keep" -gt "$#" ] && keep=0
     [ "$keep" -eq '0' ] && printf 'Aborting ...\n' && return 1
+
+    for f in $@; do
+        ! cmp >/dev/null "${@[1]}" "$f" \
+            && fail 'handle_identicals (): Contrary to the above,' \
+                    'the files are not identical.\33[0m\n'
+    done
 
     for f in $@; do [ ! "$f" = "${@[$keep]}" ] && "$jt" safe rm "$f"; done }
 
