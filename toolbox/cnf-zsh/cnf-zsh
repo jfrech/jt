@@ -1,6 +1,8 @@
 #! /bin/zsh
 
-cnf_zsh="$(realpath "$(dirname "$0")")"
-jt_local="$(realpath "$cnf_zsh/../..")"
+tool_dir="$(realpath "$(dirname "$0")")"
+dot_jt="$(realpath "$tool_dir/../..")"
+jt="$(dot_jt)/jt"
 
-sed "s|\$jt_local|$jt_local|g" "$cnf_zsh/zshrc" > "$HOME/.zshrc"
+"$jt" safe rmf "$HOME/.zshrc"
+sed "s|\$jt_local|$dot_jt|g" "$tool_dir/zshrc" > "$HOME/.zshrc"

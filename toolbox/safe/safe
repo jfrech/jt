@@ -26,6 +26,12 @@ safe_rm () {
     mkdir -p "$dst"
     printf '%s\n' "$src" > "$dst_parent/info.txt" && mv "$src" "$dst/" }
 
+safe_rmf () {
+    [ "$#" -ne '1' ] && \
+        fail 'safe_rmf (): Please specify exactly one file or directory.'
+    src="$(realpath "$1")"
+    [ -e "$src" ] && safe_rm "$src" }
+
 view () {
     find "$data_dir" -mindepth 1 -maxdepth 1 -type d | sort \
     | while read ts_dir; do
@@ -52,6 +58,7 @@ view () {
 [ "$#" -lt '1' ] && fail 'Please specify an action'
 case "$1" in
     rm)   safe_rm ${@:2} ;;
+    rmf)  safe_rmf ${@:2} ;;
     view) view ${@:2} ;;
     *)    fail "Unknown action '$1'." ;;
 esac && exit 0
