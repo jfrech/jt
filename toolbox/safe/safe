@@ -11,7 +11,7 @@ data_dir="$jt_dir/tool-data/safe"
 safe_rm () {
     [ "$#" -ne '1' ] && \
         fail 'safe_rm (): Please specify exactly one file or directory.'
-    src="$(realpath "$2")"
+    src="$(realpath "$1")"
     [ ! -e "$src" ] && fail "safe_rm (): Source '$src' does not exist."
     [ -e "$tool_dir/data/$timestamp" ] \
         && fail "safe_rm (): Timestamp '$timestamp' has already been used."
