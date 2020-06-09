@@ -1,0 +1,28 @@
+#! /bin/zsh
+
+timestamp="$(date '+%4Y-%2m-%2d_%2H-%2M-%2S_%N')"
+
+jt_dir="$(realpath "$(dirname "$0")/../..")" jt="$jt_dir/jt"
+fail () { "$jt" internal fail $@ ; exit 1 }
+
+[ "$#" -ne '2' ] && fail 'Please specify exactly one action and' \
+    'one file or directory.'
+action="$1" src="$(realpath "$2")"
+
+
+safe_rm () {
+    src="$1"
+    [ ! -e "$src" ] && fail "safe_rm (): Source '$src' does not exist."
+    [ -e "$tool_dir/data/$timestamp" ] \
+        && fail "safe_rm (): Timestamp '$timestamp' has already been used."
+
+
+    dst_parent="$jt_dir/tool-data/safe/$timestamp" dst="$dst_parent/data"
+    mkdir -p "$dst"
+    printf '%s\n%q\n' "$timestamp" "$src" > "$dst_parent/info.txt"
+    mv "$src" "$dst/" }
+
+case "$action" in
+    rm) safe_rm "$src" ;;
+    *)  fail "Unknown action '$action'." ;;
+esac && exit 0
