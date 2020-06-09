@@ -2,10 +2,9 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-
 #include <stdint.h>
 #include <stdbool.h>
-
+#include <string.h>
 #include <time.h>
 
 
@@ -43,7 +42,6 @@ size_t add_start_and_end(maze_t *maze) {
     maze->data[e + maze->w* (maze->h-1)] = END;
     return s; }
 
-bool FOUND = false;
 void print_maze(maze_t *maze) {
     for (size_t y = 0; y < maze->h; y++) {
         for (size_t x = 0; x < maze->w; x++) {
@@ -61,8 +59,14 @@ void print_maze(maze_t *maze) {
             else
                 printf("\33[101m??\33[0m");
         }
-        printf("\n"); }
-    printf("\n"); }
+        printf("\n"); } }
+
+void print_maze_ppm(maze_t *maze) {
+    printf("P1\n%zu %zu\n", maze->w, maze->h);
+    for (size_t y = 0; y < maze->h; y++) {
+        for (size_t x = 0; x < maze->w; x++)
+            printf("%s%d", x ? " " : "", (maze->data[x +maze->w* y] == WALL));
+        printf("\n"); } }
 
 void surrounding(size_t x, size_t y, maze_t *maze,
         tile_t *u, tile_t *d, tile_t *l, tile_t *r) {
@@ -100,6 +104,7 @@ void shuffle(char *arr, size_t len) {
     for (size_t j = 0; j < len; j++)
         swap(arr, j, j + rand() % (len - j)); }
 
+bool FOUND = false;
 bool walk(size_t x, size_t y, maze_t *maze) {
     maze->data[x +maze->w* y] = AIR;
 
@@ -157,12 +162,18 @@ void turn_unknowns_into_walls(maze_t *maze) {
             maze->data[j] = WALL; }
 
 void print_usage() {
-    printf("Usage: maze <w> <h>\n");}
+    printf("Usage: maze [--ppm] <w> <h>\n");}
 
 int main(int argc, char **argv) {
-    if (argc != 3)
-        return print_usage(), EXIT_FAILURE;
-    long w_ = atol(argv[1]), h_ = atol(argv[2]);
+    if (argc < 2) return print_usage(), EXIT_FAILURE;
+    bool ppm = strcmp(argv[1], "--ppm") == 0;
+    long w_, h_;
+    if (ppm) {
+        if (argc != 4) return print_usage(), EXIT_FAILURE;
+        w_ = atol(argv[2]), h_ = atol(argv[3]); }
+    else {
+        if (argc != 3) return print_usage(), EXIT_FAILURE;
+        w_ = atol(argv[1]), h_ = atol(argv[2]); }
     if (w_ < 3 || h_ < 3)
         return print_usage(), EXIT_FAILURE;
     size_t w = (size_t) w_, h = (size_t) h_;
@@ -178,7 +189,10 @@ int main(int argc, char **argv) {
     } while (!FOUND);
     turn_unknowns_into_walls(maze);
 
-    print_maze(maze);
+    if (ppm)
+        print_maze_ppm(maze);
+    else
+        print_maze(maze);
 
     free_maze(maze);
 
