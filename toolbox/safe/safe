@@ -28,7 +28,7 @@ view () {
 
         [ ! -f "$ts_dir/info.txt" ] && printf 'Malformed info file.\n' && src=""
         [ -f "$ts_dir/info.txt" ] && src="$(< "$ts_dir/info.txt")"
-        printf '    source "%q"\n' "$src"
+        printf '    source:\n        "%q"\n' "$src"
 
         printf '    content:\n'
         find "$ts_dir/data" -mindepth 1 | sort | while read ln; do
