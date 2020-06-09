@@ -2,7 +2,7 @@
 
 tool_dir="$(realpath "$(dirname "$0")")"
 dot_jt="$(realpath "$tool_dir/../..")"
-jt="$(dot_jt)/jt"
+jt="$dot_jt/jt"
 
 "$jt" safe rmf "$HOME/.zshrc"
 sed "s|\$jt_local|$dot_jt|g" "$tool_dir/zshrc" > "$HOME/.zshrc"
