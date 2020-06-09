@@ -1,0 +1,66 @@
+#! /bin/zsh
+
+jt="$(realpath "$(dirname "$0")/../../jt")"
+fail () { "$jt" internal fail $@ ; exit 1 }
+
+[ ! "$#" = '2' ] && fail "Need exactly two arguments."
+src="$(realpath "$1")" dst="$(realpath "$2")"
+[ ! -d "$src" ] && fail "Source needs to be a directory, not '$src'."
+[ ! -d "$dst" ] && fail "Destination needs to be a directory, not '$dst'."
+
+
+new_files=() duplicate_files=() collision_files=() error_files=()
+index_file () {
+    src_f="$1" dst_f="$dst/$(realpath --relative-to="$src" "$src_f")"
+    [ ! -e "$dst_f" ] && new_files+=("$src_f") && return
+    [ -f "$dst_f" ] && cmp "$src_f" "$dst_f" >/dev/null \
+        && duplicate_files+=("$src_f") && return
+    [ -f "$dst_f" ] && collision_files+=("$src_f") && return
+
+    error_files+=("$src_f") && return }
+index_all_files () {
+    find "$1" -type f | sort | while read f; do index_file "$f"; done }
+index_all_files "$src"
+
+summary () {
+    [ ! "$2" = '0' ] && printf "$1"
+    printf '%d %s file' "$2" "$3"
+    [ ! "$2" = '1' ] && printf 's'
+    [ ! "$2" = '0' ] && printf '\33[0m' }
+analysis_results () {
+    printf 'Analyzing the fusion "%q" ->> "%q".\n' "$src" "$dst"
+    for d in $duplicate_files; do printf '\33[34md "%q"\33[0m\n' "$d"; done
+    for n in $new_files      ; do printf '\33[92mn "%q"\33[0m\n' "$n"; done
+    for C in $collision_files; do printf '\33[93mC "%q"\33[0m\n' "$C"; done
+    for E in $error_files    ; do printf '\33[91mE "%q"\33[0m\n' "$E"; done
+
+    printf 'Summary of the fusion analysis "%q" ->> "%q":\n' "$src" "$dst"
+    summary '\33[34m' "$#duplicate_files" 'duplicate' ; printf ', '
+    summary '\33[92m' "$#new_files" 'new' ; printf ', '
+    summary '\33[93m' "$#collision_files" 'collision' ; printf ', '
+    summary '\33[91m' "$#error_files" 'error' ; printf '\n' }
+
+
+perform_fusion () {
+    for d in $duplicate_files; do
+        printf 'jt safe rm "%q"\n' "$d"
+        "$jt" safe rm "$d"
+    done
+    for src_n in $new_files; do
+        dst_n="$dst/$(realpath --relative-to="$src" "$src_n")"
+        printf 'mv "%q" "%q"\n' "$src_n" "$dst_n"
+        mv "$src_n" "$dst_n"
+    done }
+
+
+analysis_results
+printf "Type 'perform' to perform the fusion, i.e. remove all "
+printf '\33[34mduplicate files\33[0m in the source directory '
+printf "'$src' and move all "
+printf '\33[92mnew files\33[0m from the source directory to the destination '
+printf "directory '$dst'. > "
+read action
+case $action in
+    perform) perform_fusion ;;
+    *)       printf 'Aborting ...\n' ;;
+esac && exit 0

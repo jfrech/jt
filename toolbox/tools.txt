@@ -4,12 +4,12 @@ cnf-all
 cnf-fnt
 cnf-vim
 cnf-zsh
+de-duplicate-files
 dev
 fclr
-filefind
+fuse
 gradient
 j
-jfusemv
 jprompt
 krrp
 safe
