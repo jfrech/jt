@@ -11,7 +11,6 @@
 typedef enum { UNKNOWN, AIR, WALL, START, END } tile_t;
 typedef struct { size_t w, h; tile_t *data; } maze_t;
 
-
 maze_t *malloc_maze(size_t w, size_t h) {
     tile_t *data = malloc(w * h * sizeof *data);
     if (!data) return NULL;
@@ -50,15 +49,10 @@ void print_maze(maze_t *maze) {
                 printf("\33[47m  \33[0m");
             else if (t == WALL)
                 printf("\33[100m  \33[0m");
-            /*else if (t == START)
-                printf("\33[102ms@\33[0m");
-            else if (t == END)
-                printf("\33[102m@e\33[0m");*/
             else if (t == UNKNOWN)
                 printf("\33[40m? \33[0m");
             else
-                printf("\33[101m??\33[0m");
-        }
+                printf("\33[101m??\33[0m"); }
         printf("\n"); } }
 
 void print_maze_ppm(maze_t *maze) {
@@ -105,11 +99,11 @@ void shuffle(char *arr, size_t len) {
         swap(arr, j, j + rand() % (len - j)); }
 
 bool FOUND = false;
-bool walk(size_t x, size_t y, maze_t *maze) {
+void walk(size_t x, size_t y, maze_t *maze) {
     maze->data[x +maze->w* y] = AIR;
 
-    if (does_reach_end(x, y, maze))
-        return FOUND = true;
+    if (does_reach_end(x, y, maze)) {
+        FOUND = true; return; }
 
     char dirs[4] = { 'u', 'd', 'l', 'r' };
     shuffle(dirs, 4);
@@ -143,12 +137,9 @@ bool walk(size_t x, size_t y, maze_t *maze) {
         }
         if (maze->data[x_ +maze->w* y_] != UNKNOWN)
             continue;
-        if (number_of_surrounding_air(x_, y_, maze) - n == 0) {
-            if (walk(x_, y_, maze))
-                break; }
-    }
-
-    return false; }
+        if (number_of_surrounding_air(x_, y_, maze) - n == 0)
+            walk(x_, y_, maze);
+    } }
 
 void mystify_air(maze_t *maze) {
     for (size_t y = 0; y < maze->h; y++)
@@ -181,6 +172,8 @@ int main(int argc, char **argv) {
     srand(time(NULL));
 
     maze_t *maze = malloc_maze(w, h);
+    if (!maze)
+        return fprintf(stderr, "Memory allocation failed.\n"), EXIT_FAILURE;
     add_border(maze);
     size_t s = add_start_and_end(maze);
     do {
@@ -195,5 +188,4 @@ int main(int argc, char **argv) {
         print_maze(maze);
 
     free_maze(maze);
-
     return EXIT_SUCCESS; }
