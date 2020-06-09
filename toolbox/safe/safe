@@ -18,8 +18,7 @@ safe_rm () {
 
     dst_parent="$data_dir/$timestamp" dst="$dst_parent/data"
     mkdir -p "$dst"
-    printf '%q\n' "$src" > "$dst_parent/info.txt"
-    mv "$src" "$dst/" }
+    printf '%s\n' "$src" > "$dst_parent/info.txt" && mv "$src" "$dst/" }
 
 view () {
     find "$data_dir" -mindepth 1 -maxdepth 1 -type d | sort \
