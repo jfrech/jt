@@ -12,5 +12,6 @@ gradient
 j
 jprompt
 krrp
+maze
 safe
 Zprh
