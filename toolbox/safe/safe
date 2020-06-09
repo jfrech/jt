@@ -5,24 +5,48 @@ timestamp="$(date '+%4Y-%2m-%2d_%2H-%2M-%2S_%N')"
 jt_dir="$(realpath "$(dirname "$0")/../..")" jt="$jt_dir/jt"
 fail () { "$jt" internal fail $@ ; exit 1 }
 
-[ "$#" -ne '2' ] && fail 'Please specify exactly one action and' \
-    'one file or directory.'
-action="$1" src="$(realpath "$2")"
+data_dir="$jt_dir/tool-data/safe"
 
 
 safe_rm () {
-    src="$1"
+    [ "$#" -ne '1' ] && \
+        fail 'safe_rm (): Please specify exactly one file or directory.'
+    src="$(realpath "$2")"
     [ ! -e "$src" ] && fail "safe_rm (): Source '$src' does not exist."
     [ -e "$tool_dir/data/$timestamp" ] \
         && fail "safe_rm (): Timestamp '$timestamp' has already been used."
 
-
-    dst_parent="$jt_dir/tool-data/safe/$timestamp" dst="$dst_parent/data"
+    dst_parent="$data_dir/$timestamp" dst="$dst_parent/data"
     mkdir -p "$dst"
-    printf '%s\n%q\n' "$timestamp" "$src" > "$dst_parent/info.txt"
+    printf '%q\n' "$src" > "$dst_parent/info.txt"
     mv "$src" "$dst/" }
 
-case "$action" in
-    rm) safe_rm "$src" ;;
-    *)  fail "Unknown action '$action'." ;;
+view () {
+    find "$data_dir" -mindepth 1 -maxdepth 1 -type d | sort \
+    | while read ts_dir; do
+        ts="${ts_dir##*/}"
+        printf '%s\n' "$ts"
+
+        [ ! -f "$ts_dir/info.txt" ] && printf 'Malformed info file.\n' && src=""
+        [ -f "$ts_dir/info.txt" ] && src="$(< "$ts_dir/info.txt")"
+        printf '    source "%q"\n' "$src"
+
+        printf '    content:\n'
+        find "$ts_dir/data" -mindepth 1 | sort | while read ln; do
+            printf '        '
+            [ -f "$ln" ] && printf 'f '
+            [ -d "$ln" ] && printf 'd '
+            [ ! -f "$ln" ] && [ ! -d "$ln" ] && printf '? '
+            printf '"%q"\n' "$(realpath --relative-to="$ts_dir/data" "$ln")"
+        done
+
+        printf '\n'
+    done }
+
+
+[ "$#" -lt '1' ] && fail 'Please specify an action'
+case "$1" in
+    rm)   safe_rm ${@:2} ;;
+    view) view ${@:2} ;;
+    *)    fail "Unknown action '$1'." ;;
 esac && exit 0
