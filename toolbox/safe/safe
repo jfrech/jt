@@ -1,6 +1,6 @@
 #! /bin/zsh
 
-timestamp="$(date '+%4Y-%2m-%2d_%2H-%2M-%2S_%N')"
+timestamp="$(date '+%Y-%m-%2_%2-%2-%2_%N')"
 
 jt_dir="$(realpath "$(dirname "$0")/../..")" jt="$jt_dir/jt"
 fail () { "$jt" internal fail $@ ; exit 1 }
