@@ -6,11 +6,12 @@ jt_repository="https://raw.githubusercontent.com/jfrech/jt/master"
 jt_local="$(dirname "$0")"
 
 
-# fail () {
-#     printf "\33[1m\33[94mjt error:\33[0m %s\n" "$@" >&2 && exit 1 }
+fail () {
+    printf "\33[1m\33[94mjt error:\33[0m %s\n" "$*" >&2 && exit 1 }
 fail_in () {
-    printf "\33[1m\33[94mjt error (in '%s')\33[0m %s\n" "$1" "${@:2}" >&2 \
-        && exit 1 }
+    printf "\33[1m\33[94mjt error (in '%s')\33[0m %s" "$1"
+    fail ${@:2} }
+
 
 require () {
     for cmd in "$@"; do

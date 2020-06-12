@@ -6,7 +6,7 @@ jt="$dot_jt/jt"
 
 
 newlines_file="$tool_dir/newlines.txt"
-colorscheme_shell="$($tool_dir/create_colorscheme "${@:1}")"
+colorscheme_shell="$("$tool_dir/create_colorscheme" "${@:1}")"
 
 "jt" safe rmf "$HOME/.vimrc"
 < vimrc | eval "$colorscheme_shell" \

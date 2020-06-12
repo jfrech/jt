@@ -1,5 +1,7 @@
 #! /bin/zsh
 
-jt="$(realpath "$(dirname "$0")/../../jt")"
+tool_dir="$(realpath "$(dirname "$0")")"
+dot_jt="$(realpath "$tool_dir/../..")"
+jt="$dot_jt/jt"
 
-"$jt" lst | grep '^cnf-' | grep -v '^cnf-all$' | xargs -l "$jt"
+"$jt" internal list all | sed 's/^\[.*\] //' | grep '^cnf-' | grep -v '^cnf-all$' | xargs -l "$jt"
