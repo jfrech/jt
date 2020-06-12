@@ -4,6 +4,7 @@ tool_dir="$(realpath "$(dirname "$0")")"
 dot_jt="$(realpath "$tool_dir/../..")"
 jt="$dot_jt/jt"
 fail () { "$jt" internal fail $@ ; exit 1 }
+require () { "$jt" internal fail $@ || exit 1 }
 
 
 printf 'tool_dir="%q"\n' "$tool_dir"

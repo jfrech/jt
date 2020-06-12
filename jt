@@ -17,7 +17,7 @@ require () {
     for cmd in "$@"; do
         [ -z "$(command -v $cmd)" ] \
             && fail_in 'require ()' "Please install '$cmd'."
-    done }
+    done && exit 0 }
 
 assure_tools_list () {
     [ -f "$jt_local/toolbox/tools.txt" ] && return 0

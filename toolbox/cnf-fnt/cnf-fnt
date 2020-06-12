@@ -4,7 +4,10 @@
 
 jt="$(realpath "$(dirname "$0")/../../jt")"
 fail () { "$jt" internal fail $@ ; exit 1 }
+require () { "$jt" internal fail $@ || exit 1 }
 fonts_directory="$HOME/.local/share/fonts"
+
+require unzip
 
 download_font () {
     url="$1" base_name="$2" extension="$3"
