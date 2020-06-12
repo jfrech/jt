@@ -2,9 +2,12 @@
 
 # Jonathan Frech, 2nd, 12th of June 2020
 
-jt="$(realpath "$(dirname "$0")/../../jt")"
+tool_dir="$(realpath "$(dirname "$0")")"
+dot_jt="$(realpath "$tool_dir/../..")"
+jt="$dot_jt/jt"
 fail () { "$jt" internal fail $@ ; exit 1 }
 require () { "$jt" internal require $@ || exit 1 }
+
 require unzip
 
 fonts_directory="$HOME/.local/share/fonts"
@@ -23,5 +26,4 @@ download_font () {
         "$fonts_directory/$base_name/$base_name.$extension" > /dev/null }
 
 download_font 'https://rubjo.github.io/victor-mono' 'VictorMonoAll' 'zip'
-
-fc-cache -f
+fc-cache -fv | grep 'VictorMonoAll'

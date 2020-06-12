@@ -6,7 +6,6 @@ jt="$dot_jt/jt"
 fail () { "$jt" internal fail $@ ; exit 1 }
 require () { "$jt" internal require $@ || exit 1 }
 
-
 printf 'tool_dir="%q"\n' "$tool_dir"
 printf 'dot_dir="%q"\n' "$dot_dir"
 printf 'jt="%q"\n' "$jt"

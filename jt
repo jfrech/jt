@@ -10,14 +10,15 @@ fail () {
     printf "\33[1m\33[94mjt error:\33[0m %s\n" "$*" >&2 && exit 1 }
 fail_in () {
     printf "\33[1m\33[94mjt error (in '%s')\33[0m %s" "$1"
-    fail ${@:2} }
+    fail ${@:2} ; exit 1 }
 
 
 require () {
     for cmd in "$@"; do
         [ -z "$(command -v $cmd)" ] \
             && fail_in 'require ()' "Please install '$cmd'."
-    done && exit 0 }
+    done
+    return 0 }
 
 assure_tools_list () {
     [ -f "$jt_local/toolbox/tools.txt" ] && return 0
@@ -153,4 +154,4 @@ require realpath dirname mv rm mkdir rmdir printf grep sed curl tar make gcc \
 case "$1" in
     internal) internal ${@:2} ;;
     *)        run $@ ;;
-esac && exit 0
+esac
