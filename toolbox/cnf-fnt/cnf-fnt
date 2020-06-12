@@ -1,13 +1,13 @@
 #! /bin/zsh
 
-# Jonathan Frech, 2nd of June 2020
+# Jonathan Frech, 2nd, 12th of June 2020
 
 jt="$(realpath "$(dirname "$0")/../../jt")"
 fail () { "$jt" internal fail $@ ; exit 1 }
-require () { "$jt" internal fail $@ || exit 1 }
-fonts_directory="$HOME/.local/share/fonts"
-
+require () { "$jt" internal require $@ || exit 1 }
 require unzip
+
+fonts_directory="$HOME/.local/share/fonts"
 
 download_font () {
     url="$1" base_name="$2" extension="$3"
