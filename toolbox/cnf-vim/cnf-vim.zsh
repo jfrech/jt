@@ -15,3 +15,5 @@ colorscheme_shell="$("$tool_dir/create_colorscheme" "${@:1}")"
 mkdir -p "$HOME/.vim/colors"
 "$jt" safe rmf "$HOME/.vim/colors/j.vim"
 < "$tool_dir/j.vim.pre" | eval "$colorscheme_shell" > "$HOME/.vim/colors/j.vim"
+
+mkdir -p "$HOME/.vim/undo"

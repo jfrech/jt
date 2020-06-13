@@ -1,4 +1,10 @@
-" Jonathan Frech's .vimrc; last modified 6th of June 2020
+" Jonathan Frech's .vimrc; last modified 13rd of June 2020
+
+set path+=**
+
+set hidden
+set undofile undodir=$HOME/.vim/undo
+
 " enable syntax highlighting and load the j colorscheme
 set number
 set numberwidth=4
@@ -7,6 +13,8 @@ set cursorline
 set noruler
 syntax on
 colo j
+
+let mapleader = " "
 
 " silent mode -- center the current window (a bit of a hack)
 let s:silence = 0
@@ -18,12 +26,13 @@ function ToggleSilence ()
         noautocmd wincmd q
 
         call win_gotoid(s:silence_back)
+
+        hi VertSplit cterm=NONE ctermfg=%text ctermbg=%faint
+        set fillchars=vert:\|,fold:-
         set number colorcolumn=80
     else
+        exec 'only'
         let s:silence_back = win_getid()
-
-        hi VertSplit cterm=NONE
-        set fillchars+=vert: 
 
         call win_gotoid(s:silence_back)
         set nosplitright
@@ -43,11 +52,14 @@ function ToggleSilence ()
         set nonumber colorcolumn=0
         vertical resize 80
 
+        hi VertSplit cterm=NONE ctermfg=NONE ctermbg=NONE
+        set fillchars=vert: ,fold: 
+
         set laststatus=0
     end
     let s:silence = !s:silence
 endfunction
-nnoremap <silent> <C-j> :silent call ToggleSilence ()<cr>
+nnoremap <silent> <leader>j :silent call ToggleSilence ()<cr>
 function UntoggleSilence ()
     if s:silence
         call ToggleSilence ()
@@ -72,7 +84,7 @@ function ToggleCursorCrosshair ()
     end
     let s:crosshair = !s:crosshair
 endfunction
-nnoremap <silent> <C-h> :call ToggleCursorCrosshair ()<cr>
+nnoremap <silent> <leader>h :call ToggleCursorCrosshair ()<cr>
 
 " display special chars
 set list listchars=tab:>>,trail:~,nbsp:!
@@ -91,11 +103,11 @@ function ToggleShowInvisible ()
     end
     let s:showInvisible = !s:showInvisible
 endfunction
-nnoremap <silent> <C-i> :call ToggleShowInvisible ()<cr>
+nnoremap <silent> <leader>i :call ToggleShowInvisible ()<cr>
 
 " search highlighting
 set nohlsearch
-nnoremap <silent> <C-n> :set hlsearch!<cr>
+nnoremap <silent> <leader>n :set hlsearch!<cr>
 
 " run xxd on current buffer
 let s:hexEditing = 0
@@ -107,7 +119,7 @@ function ToggleHexEditing ()
     end
     let s:hexEditing = !s:hexEditing
 endfunction
-nnoremap <C-x> :call ToggleHexEditing ()<cr>
+nnoremap <leader>x :call ToggleHexEditing ()<cr>
 
 " insert the current date
 inoremap <C-d> <cr>$<esc>k:r! LC_ALL=en_NZ.utf8 date '+\%dth of \%B \%Y' \| sed 's/^0//; s/1th/1st/; s/2th/2nd/; s/3th/3rd/'<cr>kgJgJa<bs>
@@ -145,3 +157,5 @@ cnoremap <Down>  <Nop>
 
 " relay vim's title
 set title
+
+" nnoremap <silent> <leader>jt :term<cr>jt 

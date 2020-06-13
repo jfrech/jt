@@ -62,7 +62,7 @@ hi StatusLineTermNC cterm=None ctermfg=%grayA ctermbg=%grayB
 " hi TabLineSel
 hi Terminal ctermbg=%accentD " TODO
 hi Title cterm=None ctermfg=%accentC ctermbg=NONE
-hi Visual cterm=bold ctermfg=NONE ctermbg=%accentD
+hi Visual cterm=bold ctermfg=NONE ctermbg=%select
 " hi VisualNOS
 hi WarningMsg cterm=bold ctermfg=%grayA ctermbg=%accentA
 " hi WildMenu

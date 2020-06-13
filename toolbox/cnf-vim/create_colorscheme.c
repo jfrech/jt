@@ -43,6 +43,7 @@ int main(int argc, char **argv) {
     printf("sed 's/%%unknown/%d/g'", unknown);
     printf(" | sed 's/%%faintCC/%d/g'", faintCC);
     printf(" | sed 's/%%faintCH/%d/g'", faintCH);
+    printf(" | sed 's/%%select/%d/g'", 250);
     for (size_t j = 0; j < 8; j++)
         printf(" | sed 's/%%%s/%d/g'", color_identifiers[j], scheme[j]);
     printf("\n");
