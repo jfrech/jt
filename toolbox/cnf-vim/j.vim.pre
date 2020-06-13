@@ -10,20 +10,67 @@ if exists("syntax_on")
     syntax reset
 endif
 
-"
-hi CursorLine   cterm=NONE ctermfg=NONE ctermbg=NONE
-hi CursorColumn cterm=NONE ctermfg=NONE ctermbg=NONE
+" TODO hi VertSplit
+" TODO hi hs*
 
-hi NonText        ctermfg=%faint
-hi SpecialKey     ctermfg=%faint
-hi EndOfBuffer    ctermfg=%faint
-"
 
-hi Normal         ctermfg=%text
-
-hi LineNr         ctermfg=%faint
 hi ColorColumn    ctermbg=%faintCC
+" hi Conceal
+" hi Cursor
+" hi lCursor
+" hi CursorIm
+hi CursorColumn cterm=NONE ctermfg=NONE ctermbg=NONE
+hi CursorLine   cterm=NONE ctermfg=NONE ctermbg=NONE
+" hi Directory
+" hi DiffAdd
+" hi DiffChange
+" hi DiffDelete
+" hi DiffText
+hi EndOfBuffer    ctermfg=%faint
+hi ErrorMsg       ctermfg=NONE ctermbg=%accentA
+" hi VertSplit
+" hi Folded
+" hi FoldColumn
+" hi SignColumn
+hi IncSearch    cterm=bold ctermfg=%text ctermbg=%accentD
+hi LineNr         ctermfg=%faint
+" hi LineNrAbove
+" hi LineNrBelow
 hi CursorLineNr   cterm=NONE ctermfg=%accentA ctermbg=NONE
+hi MatchParen     cterm=bold ctermfg=%accentA ctermbg=%faint
+hi ModeMsg        cterm=italic ctermfg=%grayA ctermbg=NONE
+hi MoreMsg        ctermfg=%faint
+hi NonText        ctermfg=%faint
+hi Normal         ctermfg=%text
+hi Pmenu          cterm=NONE ctermfg=%accentB ctermbg=%grayA
+hi PmenuSel       cterm=bold ctermfg=%accentA ctermbg=%grayB
+" hi PmenuSbar
+hi Question        cterm=bold ctermfg=%text ctermbg=%faint
+hi QuestionFixLine cterm=bold ctermfg=%accentA ctermbg=%faint
+hi Search          cterm=bold ctermfg=%text ctermbg=%accentD
+hi SpecialKey     ctermfg=%faint
+" hi SpellBad
+" hi SpellCap
+" hi SpellLocal
+" hi SpellRare
+hi StatusLine cterm=None ctermfg=%text ctermbg=%grayA
+hi StatusLineNC cterm=None ctermfg=%grayA ctermbg=%grayB
+hi StatusLineTerm cterm=None ctermfg=%text ctermbg=%grayA
+hi StatusLineTermNC cterm=None ctermfg=%grayA ctermbg=%grayB
+" hi TabLine
+" hi TabLineFill
+" hi TabLineSel
+hi Terminal ctermbg=%accentD " TODO
+hi Title cterm=None ctermfg=%accentC ctermbg=NONE
+hi Visual cterm=bold ctermfg=NONE ctermbg=%accentD
+" hi VisualNOS
+hi WarningMsg cterm=bold ctermfg=%grayA ctermbg=%accentA
+" hi WildMenu
+" hi Menu
+" hi Scrollbar
+" hi Tooltip
+
+
 
 hi Comment        ctermfg=%faint
 
@@ -54,13 +101,13 @@ hi PreCondit      ctermfg=%accentB
 hi Type           ctermfg=%grayB
 hi StorageClass   ctermfg=%unknown
 hi Structure      ctermfg=%accentA
-hi Typedef        ctermfg=%unknown
+hi Typedef        ctermfg=%accentB
 
 hi Special        ctermfg=%accentB
 hi SpecialChar    ctermfg=%accentB
 hi Tag            ctermfg=%unknown
 hi Delimiter      ctermfg=%text
-hi SpecialComment ctermfg=%unknown
+hi SpecialComment cterm=bold ctermfg=%accentC
 hi Debug          ctermfg=%unknown
 
 hi Underlined     ctermfg=%unknown  ctermbg=%grayA cterm=underline
@@ -70,5 +117,3 @@ hi Ignore         ctermfg=%unknown
 hi Error          ctermfg=%accentB ctermbg=%grayA
 
 hi Todo           ctermfg=%accentD ctermbg=%grayA cterm=bold
-
-hi Search         cterm=bold ctermfg=%text ctermbg=%accentD
