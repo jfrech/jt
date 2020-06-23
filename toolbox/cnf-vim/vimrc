@@ -21,7 +21,8 @@ colo j
 let mapleader = " "
 
 " open a link "...](http://...)" in a browser
-nnoremap <leader>l 0f]lyi(o%<C-r>"<esc>:s/%/\\%/g<cr>0xxdd:!"$BROWSER" "<C-r>"<bs>"
+" TODO Possibly use a scratch buffer opposed to the current document?
+nnoremap <leader>l 0f]lyi(o%#<C-r>"<esc>:s/\([%#]\)/\\\1/g<cr>0xxxxdd:!"$BROWSER" "<C-r>"<bs>"
 
 " change quotation style
 nnoremap <leader>' F"r'f"r'
