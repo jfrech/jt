@@ -1,9 +1,16 @@
 # Jonathan Frech's zshrc; last modified 6th of June 2020
 
+
 bindkey -v
 export KEYTIMEOUT=1
 
 export EDITOR='vim'
+export BROWSER='brave-browser'
+
+alias ls='ls --color=auto'
+alias grep='grep --almost-all --classify --human-readable --color=auto'
+alias brave='brave-browser --incognito'
+
 
 "$jt_local/jt" internal build jprompt
 setopt PROMPT_SUBST

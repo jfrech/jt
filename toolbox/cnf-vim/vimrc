@@ -1,9 +1,12 @@
 " Jonathan Frech's .vimrc; last modified 13rd of June 2020
 
+" may need to be removed on slow terminals
+autocmd BufEnter * :syntax sync fromstart
+
 set path+=**
 
-set hidden
-set undofile undodir=$HOME/.vim/undo
+" the directory "$HOME/.vim" should have been created
+set hidden undofile undodir=$HOME/.vim/undo
 
 " enable syntax highlighting and load the j colorscheme
 set number
@@ -14,7 +17,18 @@ set noruler
 syntax on
 colo j
 
+" leader defined as space
 let mapleader = " "
+
+" open a link "...](http://...)" in a browser
+nnoremap <leader>l 0f]lyi(o%<C-r>"<esc>:s/%/\\%/g<cr>0xxdd:!"$BROWSER" "<C-r>"<bs>"
+
+" change quotation style
+nnoremap <leader>' F"r'f"r'
+nnoremap <leader>" F'r"f'r"
+
+" open a terminal
+nnoremap <silent> <leader>t :term<cr>
 
 " silent mode -- center the current window (a bit of a hack)
 let s:silence = 0
@@ -158,4 +172,10 @@ cnoremap <Down>  <Nop>
 " relay vim's title
 set title
 
-" nnoremap <silent> <leader>jt :term<cr>jt 
+
+
+" legacy
+"highlight ColorColumn ctermbg=30
+"highlight NonText cterm=bold ctermfg=71 ctermbg=NONE
+"nnoremap <leader>' f"vi""jda<bs><bs>''<esc>"jPT'
+"nnoremap <leader>" f'vi'"jda<bs><bs>""<esc>"jPT"
