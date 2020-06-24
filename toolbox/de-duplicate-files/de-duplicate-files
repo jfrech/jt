@@ -8,8 +8,9 @@ fail () { "$jt" internal fail $@ ; exit 1 }
 
 hashsum='md5sum'
 
-[ ! "$#" = '1' ] && fail 'No argument given.'
+[ $# -eq 0 ] && fail 'No argument given.'
 root="$(realpath "$1")"
+second_arg="$2"
 
 
 function handle_identicals () {
@@ -20,8 +21,13 @@ function handle_identicals () {
 
     printf 'Which file do you want to keep (1-%d)? ' "$#"
     printf '\33[3mAll other files will be removed. '
-    printf "Type '0' to do nothing.\33[0m > "
-    read keep; keep="$(printf '%d' "$keep")"
+
+    if [ "$second_arg" = '--keep-last' ]; then
+        keep="$#"
+    else
+        printf "Type '0' to do nothing.\33[0m > "
+        read keep; keep="$(printf '%d' "$keep")"
+    fi
     [ "$keep" -lt '1' ] && keep=0
     [ "$keep" -gt "$#" ] && keep=0
     [ "$keep" -eq '0' ] && printf 'Aborting ...\n' && return 1

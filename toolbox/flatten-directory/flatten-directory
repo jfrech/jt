@@ -1,0 +1,24 @@
+#! /bin/zsh
+
+tool_dir="$(realpath "$(dirname "$0")")"
+dot_jt="$(realpath "$tool_dir/../..")"
+jt="$dot_jt/jt"
+fail () { "$jt" internal fail $@ 1>&2; exit 1 }
+
+
+[ $# -ne 1 ] && fail "Please specify a target directory."
+target="$(realpath "$1")"
+[ ! -d "$target" ] && fail "Not a directory: '$target'."
+flattened="$target"_flattened
+[ -e "$flattened" ] \
+    && fail "Suggested flattened directory exists: '$flattened'."
+
+find "$target" -type f | while read pth; do
+    npth="$flattened/$(basename $pth)"
+    [ -e "$npth" ] \
+        && printf 'File "%q" cannot be flattened; it would collide.\n' "$pth" \
+        && continue
+
+    mkdir -p "$(dirname "$npth")"
+    mv "$pth" "$npth"
+done

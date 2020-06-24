@@ -1,5 +1,6 @@
 ansiclr
 ascii
+bundle-file-versions
 cnf-all
 cnf-fnt
 cnf-vim
@@ -7,12 +8,15 @@ cnf-zsh
 de-duplicate-files
 dev
 fclr
+flatten-directory
 fuse
 gradient
 j
 jprompt
 krrp
 maze
+mf
+recursively-add-dates-to-filenames
 safe
 wip
 Zprh

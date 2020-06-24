@@ -8,7 +8,7 @@ export EDITOR='vim'
 export BROWSER='brave-browser'
 
 alias ls='ls --color=auto'
-alias grep='grep --almost-all --classify --human-readable --color=auto'
+alias grep='grep --color=auto'
 alias brave='brave-browser --incognito'
 
 

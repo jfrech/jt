@@ -1,0 +1,38 @@
+#! /bin/zsh
+
+tool_dir="$(realpath "$(dirname "$0")")"
+dot_jt="$(realpath "$tool_dir/../..")"
+jt="$dot_jt/jt"
+fail () { "$jt" internal fail $@ 1>&2; exit 1 }
+
+
+[ $# -ne 1 ] && fail "Please specify a target directory."
+target="$(realpath "$1")"
+[ ! -d "$target" ] && fail "Not a directory: '$target'."
+
+remove_date () {
+    printf '%s\n' "$1" | sed 's|^[0-9-]*_[0-9-]*__||' }
+
+pths=()
+find "$target" -type f | while read pth; do
+    printf '%s\n' "$pth"
+    pths+=("$pth")
+done > TMP
+
+for pth in $pths; do
+    remove_date "$(basename "$pth")"
+done | sort | uniq | while read wo_date; do
+    eqs=()
+    grep "$wo_date"$ TMP | while read e; do
+        eqs+=("$e")
+    done
+    [ "$#eqs" = "1" ] && continue
+    echo "*** $wo_date ***"
+    bundle="$(dirname "${eqs[1]}")/$wo_date"
+    [ -e "$bundle" ] && echo "Bundle '$bundle' already exists." && continue
+    mkdir -p "$bundle"
+    for e in $eqs; do
+        mv "$e" "$bundle"
+        echo " - $e"
+    done
+done

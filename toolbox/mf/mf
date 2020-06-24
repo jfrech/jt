@@ -1,0 +1,31 @@
+#! /bin/zsh
+
+tool_dir="$(realpath "$(dirname "$0")")"
+dot_jt="$(realpath "$tool_dir/../..")"
+jt="$dot_jt/jt"
+fail () { "$jt" internal fail $@ 1>&2; exit 1 }
+
+
+[ $# -ne 2 ] && [ $# -ne 3 ] \
+    && fail "Usage: jt mf <dir> <msg> <'go'>?"
+target="$(realpath "$1")" message="$2" go="$3"
+[ ! -d "$target" ] && fail "Not a directory: '$target'."
+
+path_with_timestamp_and_message () {
+    pth="$1" msg="$2"
+    [ ! -f "$pth" ] && fail "'$pth' is not a file."
+    dn="$(dirname "$pth")" fn="$(basename "$pth")"
+
+    date="$(stat --format='%y' "$pth" | grep -o '^[0-9-]*')"
+    printf '%s/%s_%s' "$dn" "$date" "$msg"
+    [ ! "${fn[1]}" = "_" ] && printf '_'
+    printf '%s\n' "$fn" }
+
+find "$target" -type f | while read pth; do
+    npth="$(path_with_timestamp_and_message "$pth" "$message")"
+    printf 'mv "%q" \\\n   "%q"\n' "$pth" "$npth"
+    [ -e "$npth" ] \
+        && printf '*** The above move would result in a collision. ' \
+        && printf 'Not performing it.\n' && continue
+    [ "$go" = "go" ] && mv "$pth" "$npth"
+done

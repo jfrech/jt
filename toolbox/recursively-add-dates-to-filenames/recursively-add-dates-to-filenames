@@ -1,0 +1,47 @@
+#! /bin/zsh
+
+tool_dir="$(realpath "$(dirname "$0")")"
+dot_jt="$(realpath "$tool_dir/../..")"
+jt="$dot_jt/jt"
+fail () { "$jt" internal fail $@ 1>&2; exit 1 }
+
+"$jt" internal require \
+    realpath dirname basename stat
+
+#dry_run=''
+dry_run='dry'
+
+[ $# -ne 1 ] && fail "Please specify a target directory."
+target="$(realpath "$1")"
+[ ! -d "$target" ] && fail "Not a directory: '$target'."
+mirror="$target"_with-timestamps
+[ -e "$mirror" ] && fail "Suggested mirror exists: '$mirror'."
+
+path_with_timestamp () {
+    pth="$1"
+    [ ! -f "$pth" ] && fail "'$pth' is not a file."
+    dn="$(dirname "$pth")" fn="$(basename "$pth")"
+
+    date="$(stat --format="%y" "$pth" | grep -o '^.*\.' | sed 's| |_|;s|:|-|g;s|\.||')"
+    printf '%s/%s__%s\n' "$dn" "$date" "$fn" }
+
+fix_path_filename () {
+    pth="$1" dn="$(dirname "$pth")" fn="$(basename "$pth")"
+    ffn="$(printf '%s\n' "$fn" | sed 's|[^a-zA-Z0-9._]|-|g')"
+    printf '%s/%s\n' "$dn" "$ffn" }
+
+find "$target" -type f | while read pth; do
+    npth="$(path_with_timestamp "$pth")"
+    [ -z "$npth" ] && fail "Could not add a timestamp."
+    nnpth="$mirror/$(realpath "$npth" --relative-to="$target")"
+
+    fnnpth="$(fix_path_filename "$nnpth")"
+    [ ! -e "$fnnpth" ] && nnpth="$fnnpth"
+
+    if [ -n "$dry_run" ]; then
+        printf 'cp "%q" "%q"\n' "$pth" "$nnpth"
+    else
+        mkdir -p "$(dirname "$nnpth")"
+        cp "$pth" "$nnpth"
+    fi
+done
