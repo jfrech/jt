@@ -60,7 +60,7 @@ hi StatusLineTermNC cterm=None ctermfg=%grayA ctermbg=%grayB
 " hi TabLine
 " hi TabLineFill
 " hi TabLineSel
-hi Terminal ctermbg=%accentD " TODO
+hi Terminal ctermbg=%grayB " TODO
 hi Title cterm=None ctermfg=%accentC ctermbg=NONE
 hi Visual cterm=bold ctermfg=NONE ctermbg=%select
 " hi VisualNOS

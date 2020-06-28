@@ -31,7 +31,7 @@ set hidden undofile undodir=$HOME/.vim/undo
 set path+=**
 
 " enable syntax highlighting and load the j colorscheme
-set number numberwidth=4
+set number relativenumber numberwidth=4
 set colorcolumn=80
 set cursorline
 set noruler
@@ -82,7 +82,7 @@ function ToggleSilence ()
 
         hi VertSplit cterm=NONE ctermfg=%text ctermbg=%faint
         set fillchars=vert:\|,fold:-
-        set number colorcolumn=80
+        set number relativenumber colorcolumn=80
     else
         exec 'only'
         let s:silence_back = win_getid()
@@ -102,7 +102,7 @@ function ToggleSilence ()
         let s:silence_right = win_getid()
 
         call win_gotoid(s:silence_back)
-        set nonumber colorcolumn=0
+        set nonumber norelativenumber colorcolumn=0
         vertical resize 80
 
         hi VertSplit cterm=NONE ctermfg=NONE ctermbg=NONE
