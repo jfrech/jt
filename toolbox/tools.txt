@@ -8,6 +8,7 @@ cnf-zsh
 de-duplicate-files
 dev
 fclr
+file-keep
 flatten-directory
 fuse
 gradient

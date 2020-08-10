@@ -1,0 +1,51 @@
+#! /bin/zsh
+
+jt="$(realpath "$(dirname "$0")/../../jt")"
+fail () { "$jt" internal fail $@ ; exit 1 }
+
+jt internal require uuid sha1sum
+
+[ $# -eq 0 ] && fail 'No argument given.'
+root="$(realpath "$1")"
+del="$(realpath "$2")"
+[ $# -ne 2 ] && fail 'Not exactly two arguments given.'
+[ ! -d "$root" ] && fail "Not a directory: '$root'"
+[ ! -d "$del" ] && fail "Not a directory: '$del'"
+
+tmp="/tmp/.jt.$(uuid).tmp"
+
+printf 'Keeping "%s" files, removing all found duplicates in "%s".\n' "$root" "$del"
+
+printf 'Indexing "%s" into "%s" ...\n' "$root" "$tmp"
+
+gen_hash () {
+    sha1sum "$1" | grep -o '^[0-9a-f]*' }
+
+find "$root" -type f | sort | while read f; do
+    printf "%s:%s\n" "$(gen_hash "$f")" "$f"
+done > "$tmp"
+
+printf 'Indexed files: %d\n' "$(wc -l "$tmp" | grep -o '^[0-9]*')"
+
+find "$del" -type f | while read f; do
+    #printf '? %s\n' "$f"
+    h_s_="$(grep "^$(gen_hash "$f"):" "$tmp")" || continue
+    h_s="$(printf '%s\n' "$h_s_" | sed q)"
+    h="${h_s%:*}"
+    s="${h_s#*:}"
+
+    #printf '\n? %s\n' "$h_s"
+    #printf 'cmp %s %s\n' "$s" "$f"
+    cmp "$s" "$f" || continue
+
+    printf 'IDENTICAL %s\n' "$f"
+    printf '          %s\n' "$s"
+    printf 'rm -f "%s"\n' "$f"
+    printf '\n'
+    rm -f "$f"
+done
+
+printf 'Removing empty directories ...'
+find "$del" -type d | sort -r | while read d; do
+    rmdir --ignore-fail-on-non-empty "$d"
+done
