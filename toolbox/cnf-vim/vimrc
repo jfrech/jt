@@ -2,6 +2,10 @@
 
 let mapleader = " "
 
+" force UTF-8
+set encoding=utf-8
+setglobal fileencoding=utf-8
+set fileencodings=utf-8
 
 """ {{{ EXPERIMENTAL {{{
 set ignorecase smartcase
