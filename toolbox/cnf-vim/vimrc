@@ -30,6 +30,9 @@ set bs=indent,eol,start
 
 nnoremap <leader>u /[^ -~]<cr>
 
+" transform a postincrement to a preincrement
+nnoremap <leader>+ /++<cr>xxbi++<esc>
+
 """ }}} EXPERIMENTAL }}}
 
 
