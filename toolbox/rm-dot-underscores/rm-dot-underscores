@@ -1,0 +1,14 @@
+#! /bin/sh
+
+[ -z "$1" ] && echo "no root filepath given" && exit 1
+root="$(realpath "$1")"
+[ -z "$root" ] && echo "invalid root filepath given" && exit 1
+
+find "$root" | grep '/\._.' | while read p; do
+    printf 'rm "%s"\n' "$p"
+    rm "$p"
+done
+find "$root" | grep '/\.DS_Store$' | while read p; do
+    printf 'rm "%s"\n' "$p"
+    rm "$p"
+done
