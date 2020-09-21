@@ -46,7 +46,7 @@ set colorcolumn=80
 set cursorline
 set noruler
 syntax on
-colo j
+colo j2
 set nohlsearch
 
 " relay vim's title

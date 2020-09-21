@@ -16,4 +16,7 @@ mkdir -p "$HOME/.vim/colors"
 "$jt" safe rmf "$HOME/.vim/colors/j.vim"
 < "$tool_dir/j.vim.pre" | eval "$colorscheme_shell" > "$HOME/.vim/colors/j.vim"
 
+"$jt" safe rmf "$HOME/.vim/colors/j2.vim"
+cp "$tool_dir/j2.vim" "$HOME/.vim/colors/j2.vim"
+
 mkdir -p "$HOME/.vim/undo"
