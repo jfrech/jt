@@ -12,10 +12,9 @@ if exists("syntax_on")
     syntax reset
 endif
 
-" TODO hi VertSplit
 " TODO hi hs*
 
-hi ColorColumn   cterm=bold ctermfg=none ctermbg=240
+hi ColorColumn   cterm=bold ctermfg=none ctermbg=229
 " hi Conceal
 " hi Cursor
 " hi lCursor
@@ -27,42 +26,42 @@ hi CursorLine   cterm=none ctermfg=none ctermbg=none
 " hi DiffChange
 " hi DiffDelete
 " hi DiffText
-hi EndOfBuffer    ctermfg=52
+hi EndOfBuffer    cterm=bold ctermfg=52 ctermbg=none
 hi ErrorMsg       ctermfg=none ctermbg=196
 " hi VertSplit
 " hi Folded
 " hi FoldColumn
 " hi SignColumn
-hi IncSearch      cterm=bold ctermfg=none ctermbg=250
+hi IncSearch      cterm=bold ctermfg=199 ctermbg=250
 hi LineNr         ctermfg=244
 " hi LineNrAbove
 " hi LineNrBelow
 hi CursorLineNr   cterm=none ctermfg=220 ctermbg=none
-hi MatchParen     cterm=bold ctermfg=118 ctermbg=none
+hi MatchParen     cterm=bold ctermfg=88 ctermbg=none
 hi ModeMsg        cterm=italic ctermfg=124 ctermbg=none
 hi MoreMsg        ctermfg=124
-hi NonText        ctermfg=none
+hi NonText        cterm=bold ctermfg=52 ctermbg=none
 hi Normal         ctermfg=none
 hi Pmenu          cterm=none ctermfg=none ctermbg=240
 hi PmenuSel       cterm=bold ctermfg=202 ctermbg=238
 " hi PmenuSbar
 hi Question        cterm=bold ctermfg=82 ctermbg=none
 hi QuestionFixLine cterm=bold ctermfg=82 ctermbg=none
-hi Search          cterm=bold ctermfg=none ctermbg=240
-hi SpecialKey      ctermfg=none
+hi Search          cterm=bold ctermfg=127 ctermbg=240
+hi SpecialKey      cterm=bold ctermfg=52 ctermbg=none
 " hi SpellBad
 " hi SpellCap
 " hi SpellLocal
 " hi SpellRare
-hi StatusLine       cterm=none ctermfg=82 ctermbg=none
-hi StatusLineNC     cterm=none ctermfg=82 ctermbg=none
-hi StatusLineTerm   cterm=none ctermfg=82 ctermbg=none
-hi StatusLineTermNC cterm=none ctermfg=82 ctermbg=none
+hi StatusLine       cterm=none ctermfg=220 ctermbg=236
+hi StatusLineNC     cterm=none ctermfg=229 ctermbg=236
+hi StatusLineTerm   cterm=none ctermfg=220 ctermbg=236
+hi StatusLineTermNC cterm=none ctermfg=229 ctermbg=236
 " hi TabLine
 " hi TabLineFill
 " hi TabLineSel
-hi Terminal         cterm=none ctermfg=none ctermbg=232
-hi Title            cterm=none ctermfg=82 ctermbg=none
+hi Terminal         cterm=none ctermfg=none ctermbg=none
+hi Title            cterm=none ctermfg=220 ctermbg=none
 hi Visual           cterm=bold ctermfg=none ctermbg=250
 " hi VisualNOS
 hi WarningMsg       cterm=bold ctermfg=196 ctermbg=255
@@ -117,4 +116,4 @@ hi Ignore         ctermfg=52
 
 hi Error          cterm=bold ctermfg=232 ctermbg=196
 
-hi Todo           ctermfg=196 ctermbg=none cterm=bold
+hi Todo           ctermfg=196 ctermbg=16 cterm=bold,italic
