@@ -17,8 +17,10 @@ jprompt
 krrp
 maze
 mf
+minikanren
 recursively-add-dates-to-filenames
 rm-dot-underscores
 safe
 wip
 Zprh
+zsh-prompt
