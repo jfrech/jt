@@ -1,18 +1,34 @@
-# Jonathan Frech's zshrc; last modified 2020-11-04
+# Jonathan Frech's zshrc; last modified 2020-11-07
 
+# vim mode
 bindkey -v
 export KEYTIMEOUT=1
 
-export EDITOR='vim'
-export BROWSER='brave-browser'
+# disable history files
+HISTFILE=/dev/null
+HISTSIZE=0
+SAVEHIST=0
 export LESSHISTSIZE=0
 
+# utility settings
+export EDITOR='vim'
+export BROWSER='brave'
 alias ls='ls --color=auto -A'
 alias grep='grep --color=auto'
 alias brave='brave --incognito'
+alias cp='cp -r'
 
+# systems administration
+alias authcheck="sudo grep -i 'accept' /var/log/auth.log"
+
+# locale (TODO: verify)
+export LANG='en_nz.utf8'
+# sudo timedatectl set-timezone '...'
+
+# prompt
 setopt PROMPT_SUBST
 "$jt_local/jt" internal build zsh-prompt
 export PROMPT='$($jt_local/toolbox/zsh-prompt/zsh-prompt)'
 
+# jt
 export PATH="$PATH:/home/j/.jt"

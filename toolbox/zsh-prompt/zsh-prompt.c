@@ -23,7 +23,7 @@ int main(int argc, char **argv) {
     strftime(now, sizeof (now), now_fmt, time);
 
     if (argc > 1 && streq("--cloud", argv[1]))
-        printf("%%{\33[38;5;%dm%%}\xf0\x9f\x8c\xa9 %%{\33[m%%} ", 18);
+        printf("%%{\33[38;5;%dm%%}\xf0\x9f\x8c\xa9 %%{\33[m%%} ", 202);
 
     size_t rainbow_shift = time->tm_sec;
     printf("%%{\33[1m%%}");
