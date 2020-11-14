@@ -1,3 +1,4 @@
+Zprh
 ansiclr
 ascii
 bundle-file-versions
@@ -22,5 +23,4 @@ recursively-add-dates-to-filenames
 rm-dot-underscores
 safe
 wip
-Zprh
 zsh-prompt
