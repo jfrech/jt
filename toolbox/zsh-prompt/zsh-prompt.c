@@ -11,33 +11,52 @@ const int rainbow[] = { 196, 202, 208, 214, 220, 226, 190, 154, 118, 82, 46, 47,
     197, 196 };
 const size_t rainbow_n = sizeof (rainbow) / sizeof (int);
 
+const int pwdLength = 3;
+
 bool streq(char *s, char *z) {
     return *s ? *s == *z && streq(++s, ++z) : !*z ; }
 
 int main(int argc, char **argv) {
-    time_t _time = time(NULL);
-    struct tm *time = localtime(&_time);
+    bool flagCloud = false, flagMinimal = false;
+    for (size_t j = 1; j < argc; ++j) {
+        char *arg = argv[j];
 
-    const char *now_fmt = "%H:%M:%S";
-    char now[8 + 1];
-    strftime(now, sizeof (now), now_fmt, time);
+        flagCloud |= streq("--cloud", arg);
+        flagMinimal |= streq("--minimal", arg);
+    }
 
-    if (argc > 1 && streq("--cloud", argv[1]))
+    #define BULLET printf(" \xe2\x80\xa2 ")
+
+    if (flagCloud)
         printf("%%{\33[38;5;%dm%%}\xf0\x9f\x8c\xa9 %%{\33[m%%} ", 202);
 
-    size_t rainbow_shift = time->tm_sec;
-    printf("%%{\33[1m%%}");
-    for (size_t j = 0; j < sizeof (now) - 1; j++)
-        printf("%%{\33[38;5;%dm%%}%c", rainbow[(j + rainbow_shift) % rainbow_n],
-            now[j]);
-    printf("%%{\33[m%%}");
+    if (!flagMinimal) {
+        time_t _time = time(NULL);
+        struct tm *time = localtime(&_time);
 
-    #define BULLET printf(" \xe2\x80\xa2 ");
-    BULLET printf("%%n@%%M");
-    BULLET printf("%%3~");
-    BULLET printf("%%{%%(?.\33[38;5;154m.\33[38;5;196m)%%}%%?%%{\33[m%%}");
-    BULLET printf("%%{%%(!.\33[1m\33[38;5;163m.)%%}%%#%%{\33[m%%} ");
-    printf("%%E");
+        const char *now_fmt = "%H:%M:%S";
+        char now[8 + 1];
+        strftime(now, sizeof (now), now_fmt, time);
+
+        size_t rainbow_shift = time->tm_sec;
+        printf("%%{\33[1m%%}");
+        for (size_t j = 0; j < sizeof (now) - 1; j++)
+            printf("%%{\33[38;5;%dm%%}%c",
+                rainbow[(j + rainbow_shift) % rainbow_n], now[j]);
+        printf("%%{\33[m%%}");
+        BULLET;
+    }
+
+    if (!flagMinimal) {
+        printf("%%n@%%M"); BULLET;
+        printf("%%%d~", pwdLength); BULLET;
+    }
+
+    printf("%%{%%(?.\33[38;5;154m.\33[38;5;196m)%%}%%?%%{\33[m%%}"); BULLET;
+
     #undef BULLET
 
-    return EXIT_SUCCESS; }
+    printf("%%{%%(!.\33[1m\33[38;5;163m.)%%}%%#%%{\33[m%%} %%E");
+
+    return EXIT_SUCCESS;
+}
