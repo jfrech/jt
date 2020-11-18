@@ -63,8 +63,11 @@ automatically-pull-git () {
 
 pull-git-cd () {
     cd $@ || return $?
+
     # TODO maybe do not use `[ -d .git ]` but ask `git` if the pwd is part of a repository
-    [ -d .git ] && automatically-pull-git || return $?
+    if [ -d .git ]; then
+        automatically-pull-git || return $?
+    fi
 
     return 0
 }
