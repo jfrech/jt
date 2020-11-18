@@ -62,9 +62,11 @@ automatically-pull-git () {
 }
 
 pull-git-cd () {
-    cd $@
+    cd $@ || return $?
     # TODO maybe do not use `[ -d .git ]` but ask `git` if the pwd is part of a repository
-    [ -d .git ] && automatically-pull-git
+    [ -d .git ] && automatically-pull-git || return $?
+
+    return 0
 }
 
 #alias cd='pull-git-cd () { cd $@; [ -d .git ] && printf '"'Automatically pulling \\33[38;5;91m%s\\33[m ...\n' \"\$(basename \"\$PWD\")\""' && git pull }; pull-git-cd'
