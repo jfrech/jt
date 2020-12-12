@@ -23,12 +23,9 @@ alias cp='cp -r'
 alias authcheck="sudo grep -i 'accept' /var/log/auth.log"
 
 # TODO currently, the locale is configured incorrectly
-# locale (TODO: verify)
-export LANG='en_nz.utf-8'
-# sudo timedatectl set-timezone '...'
-# locale (TODO: verify)
-#export LC_CTYPE='en_nz.utf-8'
-export LC_CTYPE="en_US.UTF-8"
+localectl set-locale LANG='en_US.UTF-8'
+localectl set-locale LANGUAGE='en_US.UTF-8'
+localectl set-locale LC_CTYPE='en_US.UTF-8'
 
 # prompt
 setopt PROMPT_SUBST
