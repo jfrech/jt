@@ -1,83 +1,67 @@
-" Jonathan Frech's .vimrc; last modified 13rd of June 2020
+" Jonathan Frech's .vimrc; last modified 15th of January 2021
 
+" set space bar as a leader
 let mapleader = " "
 
 " force UTF-8
-set encoding=utf-8
 setglobal fileencoding=utf-8
-set fileencodings=utf-8
-
-""" {{{ EXPERIMENTAL {{{
-set ignorecase smartcase
-set incsearch
-
-" Make `Y` not work as `yy` but instead as 'yank to end of line'.
-map Y y$
-
-" open a link in the form of "...](https://...)" in a browser
-" TODO Possibly use a scratch buffer opposed to the current document?
-nnoremap <leader>l 0f]lyi(o%#<C-r>"<esc>:s/\([%#]\)/\\\1/g<cr>0xxxxdd:!"$BROWSER" "<C-r>"<bs>"
-
-" insert the current date
-inoremap <C-d> <cr>$<esc>k:r! LC_ALL=en_NZ.utf8 date '+\%dth of \%B \%Y' \| sed 's/^0//; s/1th/1st/; s/2th/2nd/; s/3th/3rd/'<cr>kgJgJa<bs>
-
-set matchpairs+=<:>
-set scrolloff=3
-"set showmatoch
-set showmode
-"set magic
-set bs=indent,eol,start
-
-nnoremap <leader>u /[^ -~]<cr>
-
-" transform a postincrement to a preincrement
-nnoremap <leader>+ /++<cr>xxbi++<esc>
-
-""" }}} EXPERIMENTAL }}}
-
+setglobal fileencodings=utf-8
+setglobal encoding=utf-8
 
 " the directory "$HOME/.vim" should have been created
 set hidden undofile undodir=$HOME/.vim/undo
 set path+=**
 
-" enable syntax highlighting and load the j colorscheme
-set number relativenumber numberwidth=4
-set colorcolumn=80
-set cursorline
-set noruler
-syntax on
-colo j2
-set nohlsearch
+" Make `Y` not work as `yy` but instead as 'yank to end of line'.
+map Y y$
 
-" relay vim's title
-set title
-
-" may need to be removed on slow terminals
-autocmd BufEnter * :syntax sync fromstart
+" allow for a more flexible insert mode
+set backspace=indent,eol,start
 
 " use four spaces instead of a tab
 set expandtab softtabstop=4 shiftwidth=4
 
-" specify line breaking behaviour
+" by default, splits shall open above and to the left
+set splitbelow splitright
+
+" configure info shown
+set showmode noshowcmd
+set noshowmatch matchpairs+=<:>
+set ignorecase smartcase incsearch
+set scrolloff=3
+set noshortname
+set showtabline=1
+set noruler
 set linebreak breakindent showbreak=~:\ 
+
+" relay vim's title
+set title
+
+" enable syntax highlighting and load the j colorscheme
+set number relativenumber numberwidth=4
+set colorcolumn=80
+set cursorline
+syntax on
+colo j2
+set nohlsearch
 
 " messages and menus
 set shortmess=asTIc
 set wildmenu wildmode=longest,full
 
-" by default, splits now shall open above and to the left
-set splitbelow splitright
-
-
-" change quotation style TODO the cursor position is non-static
-nnoremap <leader>' F"r'f"r'
-nnoremap <leader>" F'r"f'r"
-
-" leader abbreviations
+" leader-based abbreviations
 nnoremap <silent> <leader>t :term<cr>
 nnoremap <silent> <leader>r :set ruler!<cr>
 nnoremap <silent> <leader>n :set hlsearch!<cr>
 
+"                      _                _                                "
+"  _____ _____ _____  | | ___  __ _  __| | ___ _ __   _____ _____ _____  "
+" |_____|_____|_____| | |/ _ \/ _` |/ _` |/ _ \ '__| |_____|_____|_____| "
+" |_____|_____|_____| | |  __/ (_| | (_| |  __/ |    |_____|_____|_____| "
+"                     |_|\___|\__,_|\__,_|\___|_|                        "
+
+" `<leader>u` shows any non-trivial-ascii characters (mnemonic: 'true Unicode')
+nnoremap <leader>u /[^ -~]<cr>
 
 " silent mode -- center the current window (a bit of a hack)
 let s:silence = 0
@@ -149,7 +133,7 @@ function ToggleCursorCrosshair ()
 endfunction
 nnoremap <silent> <leader>h :call ToggleCursorCrosshair ()<cr>
 
-" display special chars
+" display special characters
 set list listchars=tab:>>,trail:~,nbsp:!
 let s:showInvisible = 0
 function ToggleShowInvisible ()
@@ -200,6 +184,7 @@ cnoremap <Up>    <Nop>
 cnoremap <Down>  <Nop>
 
 
+
 """ {{{ LEGACY {{{
 "highlight ColorColumn ctermbg=30
 "highlight NonText cterm=bold ctermfg=71 ctermbg=NONE
@@ -207,3 +192,30 @@ cnoremap <Down>  <Nop>
 "nnoremap <leader>" f'vi'"jda<bs><bs>""<esc>"jPT"
 "set shiftround
 """ }}} LEGACY }}}
+
+
+
+""" {{{ EXPERIMENTAL {{{
+
+" open a link in the form of "...](https://...)" in a browser
+" TODO Possibly use a scratch buffer opposed to the current document?
+nnoremap <leader>l 0f]lyi(o%#<C-r>"<esc>:s/\([%#]\)/\\\1/g<cr>0xxxxdd:!"$BROWSER" "<C-r>"<bs>"
+
+" insert the current date
+inoremap <C-d> <cr>$<esc>k:r! LC_ALL=en_NZ.utf8 date '+\%dth of \%B \%Y' \| sed 's/^0//; s/1th/1st/; s/2th/2nd/; s/3th/3rd/'<cr>kgJgJa<bs>
+
+" transform a postincrement to a preincrement
+nnoremap <leader>+ /++<cr>xxbi++<esc>
+
+" may need to be removed on slow terminals
+"autocmd BufEnter * :syntax sync fromstart
+
+" change quotation style TODO the cursor position is non-static
+nnoremap <leader>' F"r'f"r'
+nnoremap <leader>" F'r"f'r"
+
+nnoremap <leader>f gvy:newp:%!figletgg0yG:q!gvp
+
+" :h cmdline-special
+
+""" }}} EXPERIMENTAL }}}
