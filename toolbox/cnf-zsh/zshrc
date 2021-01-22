@@ -22,10 +22,22 @@ alias cp='cp -r'
 # systems administration
 alias authcheck="sudo grep -i 'accept' /var/log/auth.log"
 
-# TODO Currently, the locale is configured incorrectly!
-export LANG='en_US.UTF-8'
-export LANGUAGE='en_US.UTF-8'
-export LC_CTYPE='en_US.UTF-8'
+# sudo locale-gen en_US en_US.UTF-8
+loc='en_US.UTF-8'
+export LANG="$loc"
+export LC_CTYPE="$loc"
+export LC_NUMERIC="$loc"
+export LC_TIME="$loc"
+export LC_COLLATE="$loc"
+export LC_MONETARY="$loc"
+export LC_MESSAGES="$loc"
+export LC_PAPER="$loc"
+export LC_NAME="$loc"
+export LC_ADDRESS="$loc"
+export LC_TELEPHONE="$loc"
+export LC_MEASUREMENT="$loc"
+export LC_IDENTIFICATION="$loc"
+export LC_ALL="$loc"
 
 # prompt
 setopt PROMPT_SUBST
